@@ -49,6 +49,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
   .time-body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
   .prog-screen-body{padding-bottom:calc(32px + env(safe-area-inset-bottom))}
   #resultsScreen{padding-bottom:calc(32px + env(safe-area-inset-bottom))}
+  .expr-body{padding-bottom:calc(32px + env(safe-area-inset-bottom))}
 }
 
 /* ── PROFILE SCREEN ── */
@@ -119,9 +120,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 .chip.active{border-color:var(--gold);color:var(--gold);background:rgba(227,179,65,0.1)}
 .chip.tier-F.active{border-color:var(--green);color:var(--green);background:rgba(63,185,80,0.1)}
 .chip.tier-H.active{border-color:var(--purple);color:var(--purple);background:rgba(188,140,255,0.1)}
+/* Direction buttons with subtitle */
+.dir-btn{width:100%;text-align:left;padding:10px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:transparent;cursor:pointer;transition:all 0.15s;font-family:'Outfit',sans-serif;margin-bottom:6px}
+.dir-btn:last-child{margin-bottom:0}
+.dir-btn.active{border-color:var(--gold);background:rgba(227,179,65,0.08)}
+.dir-btn-label{font-size:0.82rem;font-weight:600;color:var(--text2);transition:color 0.15s}
+.dir-btn.active .dir-btn-label{color:var(--gold)}
+.dir-btn-sub{font-size:0.7rem;color:var(--text3);margin-top:2px;line-height:1.3;transition:color 0.15s}
+.dir-btn.active .dir-btn-sub{color:rgba(227,179,65,0.7)}
 
-.reset-link{text-align:center;font-size:0.78rem;color:var(--red);cursor:pointer;padding:6px;text-decoration:underline;opacity:0.7}
-.reset-link:hover{opacity:1}
+
 
 /* ── STUDY SCREEN ── */
 #studyScreen{background:var(--bg)}
@@ -248,9 +256,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 /* ── TIME EXPRESSIONS SCREEN ── */
 #timeScreen{background:var(--bg)}
 .time-body{flex:1;display:flex;flex-direction:column;padding:0 0 24px;overflow-y:auto}
-.time-mode-bar{display:flex;gap:0;padding:12px 18px 0;flex-shrink:0}
-.time-mode-btn{flex:1;padding:9px 6px;border:none;font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.18s;border-bottom:2px solid var(--border);background:transparent;color:var(--text2)}
-.time-mode-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.time-mode-bar{display:flex;gap:8px;padding:14px 16px 0;flex-shrink:0}
+.time-mode-btn{flex:1;padding:12px 8px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Outfit',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.18s;background:var(--surface);color:var(--text2);text-transform:uppercase;letter-spacing:0.06em}
+.time-mode-btn.active{background:rgba(88,166,255,0.12);border-color:var(--accent);color:var(--accent)}
 .time-inner{padding:14px 18px;display:flex;flex-direction:column;gap:14px}
 
 /* Tense tabs */
@@ -396,6 +404,53 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 .prog-tier-nums{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700;color:var(--text);margin-bottom:6px}
 .prog-tier-sub{font-size:0.68rem;color:var(--text3)}
 .prog-divider{height:1px;background:var(--border);margin:4px 0}
+
+/* ── SETTINGS BAR ── */
+.settings-bar{width:100%;display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color 0.18s;text-align:left}
+.settings-bar:active{background:var(--surface2)}
+.settings-bar.open{border-color:var(--accent);border-bottom-left-radius:0;border-bottom-right-radius:0}
+.settings-bar-icon{font-size:1rem;flex-shrink:0}
+.settings-bar-summary{flex:1;font-size:0.78rem;color:var(--text2);line-height:1.4}
+.settings-bar-chevron{font-size:0.65rem;color:var(--text3);transition:transform 0.2s;flex-shrink:0}
+.settings-bar.open .settings-bar-chevron{transform:rotate(180deg)}
+.settings-panel{background:var(--surface);border:1.5px solid var(--accent);border-top:none;border-bottom-left-radius:var(--radius-sm);border-bottom-right-radius:var(--radius-sm);padding:14px;margin-top:-2px}
+.settings-reset-row{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.settings-reset-btn{background:none;border:1.5px solid rgba(248,81,73,0.3);border-radius:var(--radius-sm);color:var(--red);font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:600;padding:9px 14px;cursor:pointer;width:100%;opacity:0.8;transition:all 0.18s}
+.settings-reset-btn:active{opacity:1;background:rgba(248,81,73,0.08)}
+.settings-reset-confirm{margin-top:10px;background:rgba(248,81,73,0.06);border:1.5px solid rgba(248,81,73,0.25);border-radius:var(--radius-sm);padding:14px}
+.settings-reset-warning{font-size:0.8rem;color:var(--text2);line-height:1.5;margin-bottom:12px}
+.settings-reset-warning strong{color:var(--red)}
+.settings-reset-btns{display:flex;gap:8px}
+.settings-reset-confirm-btn{background:var(--red);color:#fff;flex:1}
+.settings-reset-confirm-btn:hover{opacity:0.88}
+.expr-body{padding:16px;flex:1;display:flex;flex-direction:column;gap:14px;max-width:480px;margin:0 auto;width:100%}
+.expr-mode-bar{display:flex;gap:8px;flex-shrink:0}
+.expr-mode-btn{flex:1;padding:9px 12px;border-radius:var(--radius-sm);font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:all 0.18s}
+.expr-mode-btn.active{background:rgba(247,129,102,0.15);border-color:var(--accent2);color:var(--accent2)}
+.expr-counter{text-align:center;font-size:0.72rem;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase}
+.expr-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px 20px;display:flex;flex-direction:column;gap:10px}
+.expr-french{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;color:var(--accent2);line-height:1.2}
+.expr-literal-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3)}
+.expr-literal{font-size:1rem;color:var(--gold);font-style:italic;line-height:1.4}
+.expr-divider{height:1px;background:var(--border);margin:2px 0}
+.expr-meaning-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3)}
+.expr-meaning{font-size:0.95rem;color:var(--text);line-height:1.5;font-weight:500}
+.expr-tag{font-size:0.7rem;color:var(--text3);margin-top:4px}
+.expr-nav{display:flex;gap:10px}
+.expr-nav-btn{flex:1;padding:11px;border-radius:var(--radius-sm);font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:all 0.18s}
+.expr-nav-btn:active{background:var(--surface2)}
+.expr-nav-next{border-color:var(--accent2);color:var(--accent2);background:rgba(247,129,102,0.08)}
+.expr-list-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px}
+.expr-list-fr{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--accent2);margin-bottom:4px}
+.expr-list-lit{font-size:0.8rem;color:var(--gold);font-style:italic;margin-bottom:6px}
+.expr-list-mean{font-size:0.82rem;color:var(--text);line-height:1.4}
+.expr-list-tag{font-size:0.68rem;color:var(--text3);margin-top:4px}
+/* Results screen expression teaser */
+.results-expr-teaser{background:var(--surface);border:1px solid rgba(247,129,102,0.3);border-radius:var(--radius-sm);padding:14px 16px;margin-top:16px;text-align:left;width:100%}
+.results-expr-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent2);margin-bottom:6px}
+.results-expr-fr{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.results-expr-lit{font-size:0.78rem;color:var(--gold);font-style:italic;margin-bottom:4px}
+.results-expr-mean{font-size:0.78rem;color:var(--text2)}
 </style>
 </head>
 <body>
@@ -438,6 +493,42 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
       <div class="stat-card"><div class="stat-val" id="statTotal">0</div><div class="stat-label">Cards</div></div>
       <div class="stat-card"><div class="stat-val" style="color:var(--green)" id="statLearned">0</div><div class="stat-label">Learned</div></div>
       <div class="stat-card"><div class="stat-val" style="color:var(--red)" id="statHard">0</div><div class="stat-label">Hard</div></div>
+    </div>
+
+    <!-- Settings bar -->
+    <button class="settings-bar" id="settingsBar" onclick="toggleSettings()">
+      <span class="settings-bar-icon">⚙️</span>
+      <span class="settings-bar-summary" id="settingsSummary"></span>
+      <span class="settings-bar-chevron" id="settingsChevron">▼</span>
+    </button>
+    <div class="settings-panel" id="settingsPanel" style="display:none">
+      <div class="settings-section-label">Direction</div>
+      <div id="dirChips"></div>
+      <div class="settings-section-label" style="margin-top:12px">Tier</div>
+      <div class="filter-row" id="tierChips"></div>
+      <div class="settings-section-label" style="margin-top:12px">Units</div>
+      <div class="filter-card" style="margin-bottom:6px">
+        <div class="filter-card-title">Theme 1 — People &amp; Lifestyle</div>
+        <div class="filter-row" id="t1chips"></div>
+      </div>
+      <div class="filter-card" style="margin-bottom:6px">
+        <div class="filter-card-title">Theme 2 — Popular Culture</div>
+        <div class="filter-row" id="t2chips"></div>
+      </div>
+      <div class="filter-card">
+        <div class="filter-card-title">Theme 3 — Communication &amp; the World</div>
+        <div class="filter-row" id="t3chips"></div>
+      </div>
+      <div class="settings-reset-row">
+        <button class="settings-reset-btn" id="resetProgress">⚠️ Reset my progress</button>
+      </div>
+      <div class="settings-reset-confirm hidden" id="resetConfirm">
+        <div class="settings-reset-warning">This will permanently delete all progress for <strong id="resetProfileName"></strong>. This cannot be undone.</div>
+        <div class="settings-reset-btns">
+          <button class="btn btn-ghost" id="resetCancel">Cancel</button>
+          <button class="btn settings-reset-confirm-btn" id="resetConfirmBtn">Yes, reset everything</button>
+        </div>
+      </div>
     </div>
 
     <div class="section-label">Study Mode</div>
@@ -499,31 +590,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
       <div class="mode-count" id="synCount">–</div>
     </div>
 
-    <div class="section-label">Filter by Unit</div>
-    <div class="filter-card">
-      <div class="filter-card-title">Theme 1 — People &amp; Lifestyle</div>
-      <div class="filter-row" id="t1chips"></div>
-    </div>
-    <div class="filter-card">
-      <div class="filter-card-title">Theme 2 — Popular Culture</div>
-      <div class="filter-row" id="t2chips"></div>
-    </div>
-    <div class="filter-card">
-      <div class="filter-card-title">Theme 3 — Communication &amp; the World</div>
-      <div class="filter-row" id="t3chips"></div>
+    <div class="mode-card" id="modeExpr">
+      <div class="mode-icon" style="background:rgba(247,129,102,0.12)">🐓</div>
+      <div class="mode-info">
+        <div class="mode-title">Expressions</div>
+        <div class="mode-desc">Funny French phrases that make no sense word-for-word. Browse or read them all.</div>
+      </div>
+      <div class="mode-count">30</div>
     </div>
 
-    <div class="section-label">Direction</div>
-    <div class="filter-card">
-      <div class="filter-row" id="dirChips"></div>
-    </div>
-
-    <div class="section-label">Tier</div>
-    <div class="filter-card">
-      <div class="filter-row" id="tierChips"></div>
-    </div>
-
-    <div class="reset-link" id="resetProgress">Reset my progress for this profile</div>
   </div>
 </div>
 
@@ -533,7 +608,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
     <button class="back-btn" id="studyBack">←</button>
     <div style="display:flex;gap:8px;align-items:center">
       <div class="mode-badge" id="studyModeBadge">Flashcards</div>
-      <div class="mode-badge" id="studyDirBadge" style="font-size:0.85rem">🇫🇷 → 🇬🇧</div>
+      <div class="mode-badge" id="studyDirBadge" style="font-size:0.85rem">🇫🇷 French → 🇬🇧 English</div>
     </div>
     <div class="queue-info" id="queueInfo"></div>
   </div>
@@ -570,8 +645,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
     <button class="ans-btn btn-right" id="btnRight">✓ Got it<span class="lbl">well done!</span></button>
   </div>
   <div class="faux-dir-toggle" id="fauxDirToggle" style="display:none;margin-bottom:4px">
-    <button class="faux-dir-btn active" id="fauxDirFwd">🇫🇷 → 🇬🇧 French to English</button>
-    <button class="faux-dir-btn" id="fauxDirRev">🇬🇧 → 🇫🇷 English to French</button>
+    <button class="faux-dir-btn active" id="fauxDirFwd">🇫🇷 French → 🇬🇧 English French to English</button>
+    <button class="faux-dir-btn" id="fauxDirRev">🇬🇧 English → 🇫🇷 French English to French</button>
   </div>
   <div class="mcq-area hidden" id="mcqArea">
     <button class="mcq-btn" id="mcqBtn0"></button>
@@ -597,6 +672,53 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
     <div class="results-btns">
       <button class="btn btn-primary" id="rPlayAgain">Play Again</button>
       <button class="btn btn-outline" id="rMenu">Back to Menu</button>
+    </div>
+    <div class="results-expr-teaser" id="resultsExprTeaser">
+      <div class="results-expr-label">🐓 Expression du jour</div>
+      <div class="results-expr-fr" id="rExprFr"></div>
+      <div class="results-expr-lit" id="rExprLit"></div>
+      <div class="results-expr-mean" id="rExprMean"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPRESSIONS SCREEN -->
+<div class="screen hidden" id="exprScreen">
+  <div class="top-bar">
+    <button class="back-btn" id="exprBack">←</button>
+    <div class="user-info">
+      <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2)">🐓 Expressions</span>
+    </div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="expr-body">
+    <!-- Mode toggle -->
+    <div class="expr-mode-bar">
+      <button class="expr-mode-btn active" id="exprModeBrowse">🃏 Browse</button>
+      <button class="expr-mode-btn" id="exprModeList">📋 All</button>
+    </div>
+
+    <!-- Browse panel -->
+    <div id="exprBrowsePanel">
+      <div class="expr-counter" id="exprCounter">1 / 30</div>
+      <div class="expr-card" id="exprCard">
+        <div class="expr-french" id="exprFrench"></div>
+        <div class="expr-literal-label">Literally…</div>
+        <div class="expr-literal" id="exprLiteral"></div>
+        <div class="expr-divider"></div>
+        <div class="expr-meaning-label">Actually means:</div>
+        <div class="expr-meaning" id="exprMeaning"></div>
+        <div class="expr-tag" id="exprTag"></div>
+      </div>
+      <div class="expr-nav">
+        <button class="expr-nav-btn" id="exprPrev">← Prev</button>
+        <button class="expr-nav-btn expr-nav-next" id="exprNext">Next →</button>
+      </div>
+    </div>
+
+    <!-- List panel -->
+    <div id="exprListPanel" style="display:none">
+      <div id="exprListBody"></div>
     </div>
   </div>
 </div>
@@ -682,8 +804,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
   </div>
   <div class="time-body">
     <div class="time-mode-bar">
-      <button class="time-mode-btn active" id="timeModeRecog">🔍 Recognise</button>
-      <button class="time-mode-btn" id="timeModeRecall">📋 Recall</button>
+      <button class="time-mode-btn active" id="timeModeRecog">🔍 Recognise Mode</button>
+      <button class="time-mode-btn" id="timeModeRecall">📋 Recall Mode</button>
     </div>
 
     <!-- RECOGNITION MODE -->
@@ -692,6 +814,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
         <div class="time-stat"><div class="time-stat-val" style="color:var(--green)" id="trCorrect">0</div><div class="time-stat-lab">Correct</div></div>
         <div class="time-stat"><div class="time-stat-val" style="color:var(--red)" id="trWrong">0</div><div class="time-stat-lab">Wrong</div></div>
         <div class="time-stat"><div class="time-stat-val" style="color:var(--gold)" id="trStreak">0</div><div class="time-stat-lab">Streak</div></div>
+        <div class="time-stat"><div class="time-stat-val" style="color:var(--purple)" id="trPB">–</div><div class="time-stat-lab">Best</div></div>
       </div>
       <div class="time-card">
         <div class="time-card-label">Which tense(s) does this signal?</div>
@@ -2363,15 +2486,16 @@ function renderProfiles(){
   grid.innerHTML='';
   profiles.forEach((p,i)=>{
     const prog = getProgress(p.id);
-    const total = VOCAB.length;
-    const learned = Object.values(prog).filter(x=>x.score>=3).length;
-    const hard = Object.values(prog).filter(x=>x.wrong>x.correct&&x.wrong>0).length;
+    const seen = new Set();
+    const words = VOCAB.filter(v=>{ if(seen.has(v.f)) return false; seen.add(v.f); return true; });
+    const mastered = words.filter(v=>isWordMastered(prog,v.f)).length;
+    const inProgress = words.filter(v=>!isWordMastered(prog,v.f)&&isWordInProgress(prog,v.f)).length;
     const div = document.createElement('div');
     div.className='profile-btn';
     div.style.animationDelay=i*0.05+'s';
     div.innerHTML=`<div class="avatar" style="background:${p.color}22;color:${p.color}">${p.name[0].toUpperCase()}</div>
       <div class="pname">${p.name}</div>
-      <div class="pstats">${learned} learned · ${hard} hard</div>
+      <div class="pstats">${mastered} mastered · ${inProgress} in progress</div>
       <button class="pdel" title="Delete" onclick="deleteProfile(event,${i})">✕</button>`;
     div.onclick=(e)=>{if(!e.target.classList.contains('pdel'))selectProfile(i);};
     grid.appendChild(div);
@@ -2429,6 +2553,7 @@ function saveProfilePrefs(){
     const prefs = {activeUnits, activeTiers, activeDirection};
     localStorage.setItem('fr_prefs_'+currentProfile.id, JSON.stringify(prefs));
   }catch(e){console.warn('Storage unavailable — prefs not saved',e);}
+  updateSettingsSummary();
 }
 function loadProfilePrefs(){
   try {
@@ -2450,6 +2575,25 @@ function openMenu(){
   document.getElementById('menuName').textContent=currentProfile.name;
   buildFilterChips();
   updateMenuStats();
+  updateSettingsSummary();
+  // Always start collapsed
+  document.getElementById('settingsPanel').style.display='none';
+  document.getElementById('settingsBar').classList.remove('open');
+}
+
+function toggleSettings(){
+  const panel=document.getElementById('settingsPanel');
+  const bar=document.getElementById('settingsBar');
+  const open=panel.style.display==='none';
+  panel.style.display=open?'block':'none';
+  bar.classList.toggle('open',open);
+}
+
+function updateSettingsSummary(){
+  const dirLabels={'fr-en':'🇫🇷→🇬🇧 French to English','en-fr':'🇬🇧→🇫🇷 English to French','both':'🔀 Both ways'};
+  const tierLabel=activeTiers.length===2?'All tiers':activeTiers.includes('F')?'Foundation only':'Higher only';
+  const unitLabel=activeUnits.length===9?'All units':`U${activeUnits.sort((a,b)=>a-b).join(', U')}`;
+  document.getElementById('settingsSummary').textContent=`${dirLabels[activeDirection]} · ${tierLabel} · ${unitLabel}`;
 }
 
 function buildFilterChips(){
@@ -2470,21 +2614,33 @@ function buildFilterChips(){
     else if(u<=6)t2.appendChild(c);
     else t3.appendChild(c);
   }
-  // Direction chips
+  // Direction buttons
   const dc = document.getElementById('dirChips');
   dc.innerHTML = '';
   const dirs = [
-    {id:'fr-en', label:'🇫🇷 → 🇬🇧  French to English'},
-    {id:'en-fr', label:'🇬🇧 → 🇫🇷  English to French'},
-    {id:'both',  label:'🔀  Both mixed'}
+    {
+      id:'fr-en',
+      label:'🇫🇷 French → 🇬🇧 English',
+      sub:'Recognition — reading & listening skill. Easier, but essential.'
+    },
+    {
+      id:'en-fr',
+      label:'🇬🇧 English → 🇫🇷 French',
+      sub:'Production — writing & speaking skill. Harder, where most marks are lost.'
+    },
+    {
+      id:'both',
+      label:'🔀  Both ways',
+      sub:'Mixes recognition and production. Best all-round preparation.'
+    }
   ];
   dirs.forEach(d => {
     const c = document.createElement('button');
-    c.className = 'chip' + (activeDirection === d.id ? ' active' : '');
-    c.textContent = d.label;
+    c.className = 'dir-btn' + (activeDirection === d.id ? ' active' : '');
+    c.innerHTML = `<div class="dir-btn-label">${d.label}</div><div class="dir-btn-sub">${d.sub}</div>`;
     c.onclick = () => {
       activeDirection = d.id;
-      dc.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+      dc.querySelectorAll('.dir-btn').forEach(x => x.classList.remove('active'));
       c.classList.add('active');
       saveProfilePrefs();
     };
@@ -2534,7 +2690,7 @@ function getFauxVocab(){
 function updateMenuStats(){
   const prog=getProgress(currentProfile.id);
   const total=VOCAB.length;
-  // Use new mastered definition (both directions, 2+ sessions)
+  // Mastered = 3+ correct answers total across both directions
   const seen=new Set();
   let masteredCount=0, hardCount=0;
   Object.entries(prog).forEach(([key,p])=>{
@@ -2573,11 +2729,23 @@ document.getElementById('modeFaux').onclick=()=>{
   startStudy('faux');
 };
 document.getElementById('resetProgress').onclick=()=>{
-  if(confirm('Reset all progress for '+currentProfile.name+'?')){
-    saveProgress(currentProfile.id,{});
-    updateMenuStats();
-    showToast('Progress reset ✓');
-  }
+  document.getElementById('resetProfileName').textContent=currentProfile.name;
+  document.getElementById('resetConfirm').classList.remove('hidden');
+  document.getElementById('resetProgress').style.display='none';
+};
+document.getElementById('resetCancel').onclick=()=>{
+  document.getElementById('resetConfirm').classList.add('hidden');
+  document.getElementById('resetProgress').style.display='';
+};
+document.getElementById('resetConfirmBtn').onclick=()=>{
+  saveProgress(currentProfile.id,{});
+  updateMenuStats();
+  document.getElementById('resetConfirm').classList.add('hidden');
+  document.getElementById('resetProgress').style.display='';
+  // Close settings panel after reset
+  document.getElementById('settingsPanel').style.display='none';
+  document.getElementById('settingsBar').classList.remove('open');
+  showToast('Progress reset for '+currentProfile.name);
 };
 
 // ══════════════════════════════════════════════
@@ -2665,7 +2833,7 @@ function showNextCard(){
     document.getElementById('hardDot').style.display=isHard?'block':'none';
     document.getElementById('frontWord').textContent=isRev?v.faux_ami_trap:v.f;
     document.getElementById('frontHint').textContent='';
-    document.getElementById('studyDirBadge').textContent=isRev?'🇬🇧 → 🇫🇷':'🇫🇷 → 🇬🇧';
+    document.getElementById('studyDirBadge').textContent=isRev?'🇬🇧 English → 🇫🇷 French':'🇫🇷 French → 🇬🇧 English';
     document.getElementById('cardInner').classList.remove('flipped');
     // Build MCQ options
     buildMCQ(v,isRev);
@@ -2686,7 +2854,7 @@ function showNextCard(){
       document.getElementById('backHint').textContent=v.pos+' · '+v.e;
     }
     document.getElementById('backTag').textContent=tag;
-    document.getElementById('studyDirBadge').textContent=isFrEn?'🇫🇷 → 🇬🇧':'🇬🇧 → 🇫🇷';
+    document.getElementById('studyDirBadge').textContent=isFrEn?'🇫🇷 French → 🇬🇧 English':'🇬🇧 English → 🇫🇷 French';
     document.getElementById('cardInner').classList.remove('flipped');
     document.getElementById('answerArea').classList.add('hidden');
   }
@@ -2922,6 +3090,7 @@ function showResults(){
   document.getElementById('rCorrect').textContent=sessionCorrect;
   document.getElementById('rWrong').textContent=sessionWrong;
   document.getElementById('rScore').textContent=pct+'%';
+  injectResultsExpression();
   showScreen('resultsScreen');
 }
 document.getElementById('rPlayAgain').onclick=()=>startStudy(currentMode);
@@ -2942,8 +3111,10 @@ function showToast(msg){
 // ══════════════════════════════════════════════
 
 // Nouns: {f, e, g:"m"|"f"}
-const DRILL_NOUNS = [
-  // People & relationships
+// Nouns split into two pools:
+// DRILL_NOUNS_PERSON — people & animals (used with personality adjectives)
+// DRILL_NOUNS_GENERAL — objects, places, concepts (used with descriptive adjectives)
+const DRILL_NOUNS_PERSON = [
   {f:"ami",        e:"friend",        g:"m"},
   {f:"amie",       e:"friend",        g:"f"},
   {f:"homme",      e:"man",           g:"m"},
@@ -2958,12 +3129,12 @@ const DRILL_NOUNS = [
   {f:"cousin",     e:"cousin",        g:"m"},
   {f:"professeur", e:"teacher",       g:"m"},
   {f:"élève",      e:"pupil",         g:"m"},
-  // Animals
   {f:"chien",      e:"dog",           g:"m"},
   {f:"chat",       e:"cat",           g:"m"},
   {f:"oiseau",     e:"bird",          g:"m"},
   {f:"animal",     e:"animal",        g:"m"},
-  // Objects & places
+];
+const DRILL_NOUNS_GENERAL = [
   {f:"livre",      e:"book",          g:"m"},
   {f:"sac",        e:"bag",           g:"m"},
   {f:"stylo",      e:"pen",           g:"m"},
@@ -3007,63 +3178,67 @@ const DRILL_NOUNS = [
   {f:"mer",        e:"sea",           g:"f"},
   {f:"montagne",   e:"mountain",      g:"f"},
 ];
+// Combined for backward compat
+const DRILL_NOUNS = [...DRILL_NOUNS_PERSON, ...DRILL_NOUNS_GENERAL];
 
-// Adjectives: {e, ms, fs, mp, fp, pre:bool}
-// pre=true means adjective goes BEFORE the noun
+// Adjectives: {e, ms, fs, mp, fp, pre:bool, pool:"person"|"general"|"any"}
+// pool:"person"  — personality/state adjectives, only make sense with people/animals
+// pool:"general" — colours, size, quality adjectives, work with anything
+// pool:"any"     — genuinely work with both (e.g. important, social)
 const DRILL_ADJS = [
   // Colours (all post-noun)
-  {e:"green",       ms:"vert",       fs:"verte",      mp:"verts",      fp:"vertes",      pre:false},
-  {e:"blue",        ms:"bleu",       fs:"bleue",      mp:"bleus",      fp:"bleues",      pre:false},
-  {e:"red",         ms:"rouge",      fs:"rouge",      mp:"rouges",     fp:"rouges",      pre:false},
-  {e:"white",       ms:"blanc",      fs:"blanche",    mp:"blancs",     fp:"blanches",    pre:false},
-  {e:"black",       ms:"noir",       fs:"noire",      mp:"noirs",      fp:"noires",      pre:false},
-  {e:"grey",        ms:"gris",       fs:"grise",      mp:"gris",       fp:"grises",      pre:false},
-  {e:"brown",       ms:"brun",       fs:"brune",      mp:"bruns",      fp:"brunes",      pre:false},
+  {e:"green",       ms:"vert",       fs:"verte",      mp:"verts",      fp:"vertes",      pre:false, pool:"general"},
+  {e:"blue",        ms:"bleu",       fs:"bleue",      mp:"bleus",      fp:"bleues",      pre:false, pool:"general"},
+  {e:"red",         ms:"rouge",      fs:"rouge",      mp:"rouges",     fp:"rouges",      pre:false, pool:"general"},
+  {e:"white",       ms:"blanc",      fs:"blanche",    mp:"blancs",     fp:"blanches",    pre:false, pool:"general"},
+  {e:"black",       ms:"noir",       fs:"noire",      mp:"noirs",      fp:"noires",      pre:false, pool:"general"},
+  {e:"grey",        ms:"gris",       fs:"grise",      mp:"gris",       fp:"grises",      pre:false, pool:"general"},
+  {e:"brown",       ms:"brun",       fs:"brune",      mp:"bruns",      fp:"brunes",      pre:false, pool:"general"},
   // Size / age (pre-noun)
-  {e:"big",         ms:"grand",      fs:"grande",     mp:"grands",     fp:"grandes",     pre:true},
-  {e:"small",       ms:"petit",      fs:"petite",     mp:"petits",     fp:"petites",     pre:true},
-  {e:"long",        ms:"long",       fs:"longue",     mp:"longs",      fp:"longues",     pre:false},
-  {e:"short",       ms:"court",      fs:"courte",     mp:"courts",     fp:"courtes",     pre:false},
-  {e:"young",       ms:"jeune",      fs:"jeune",      mp:"jeunes",     fp:"jeunes",      pre:true},
-  {e:"old",         ms:"vieux",      fs:"vieille",    mp:"vieux",      fp:"vieilles",    pre:true},
-  {e:"new",         ms:"nouveau",    fs:"nouvelle",   mp:"nouveaux",   fp:"nouvelles",   pre:true},
-  {e:"beautiful",   ms:"beau",       fs:"belle",      mp:"beaux",      fp:"belles",      pre:true},
-  {e:"good",        ms:"bon",        fs:"bonne",      mp:"bons",       fp:"bonnes",      pre:true},
-  {e:"bad",         ms:"mauvais",    fs:"mauvaise",   mp:"mauvais",    fp:"mauvaises",   pre:true},
-  // Personality / quality (post-noun)
-  {e:"happy",       ms:"heureux",    fs:"heureuse",   mp:"heureux",    fp:"heureuses",   pre:false},
-  {e:"sad",         ms:"triste",     fs:"triste",     mp:"tristes",    fp:"tristes",     pre:false},
-  {e:"kind",        ms:"gentil",     fs:"gentille",   mp:"gentils",    fp:"gentilles",   pre:false},
-  {e:"intelligent", ms:"intelligent",fs:"intelligente",mp:"intelligents",fp:"intelligentes",pre:false},
-  {e:"hard-working",ms:"travailleur",fs:"travailleuse",mp:"travailleurs",fp:"travailleuses",pre:false},
-  {e:"lazy",        ms:"paresseux",  fs:"paresseuse", mp:"paresseux",  fp:"paresseuses", pre:false},
-  {e:"interesting", ms:"intéressant",fs:"intéressante",mp:"intéressants",fp:"intéressantes",pre:false},
-  {e:"boring",      ms:"ennuyeux",   fs:"ennuyeuse",  mp:"ennuyeux",   fp:"ennuyeuses",  pre:false},
-  {e:"funny",       ms:"drôle",      fs:"drôle",      mp:"drôles",     fp:"drôles",      pre:false},
-  {e:"serious",     ms:"sérieux",    fs:"sérieuse",   mp:"sérieux",    fp:"sérieuses",   pre:false},
-  {e:"strict",      ms:"strict",     fs:"stricte",    mp:"stricts",    fp:"strictes",    pre:false},
-  {e:"shy",         ms:"timide",     fs:"timide",     mp:"timides",    fp:"timides",     pre:false},
-  {e:"proud",       ms:"fier",       fs:"fière",      mp:"fiers",      fp:"fières",      pre:false},
-  {e:"traditional", ms:"traditionnel",fs:"traditionnelle",mp:"traditionnels",fp:"traditionnelles",pre:false},
-  {e:"popular",     ms:"populaire",  fs:"populaire",  mp:"populaires", fp:"populaires",  pre:false},
-  {e:"famous",      ms:"célèbre",    fs:"célèbre",    mp:"célèbres",   fp:"célèbres",    pre:false},
-  // Health / state
-  {e:"healthy",     ms:"sain",       fs:"saine",      mp:"sains",      fp:"saines",      pre:false},
-  {e:"ill",         ms:"malade",     fs:"malade",     mp:"malades",    fp:"malades",     pre:false},
-  {e:"tired",       ms:"fatigué",    fs:"fatiguée",   mp:"fatigués",   fp:"fatiguées",   pre:false},
-  {e:"balanced",    ms:"équilibré",  fs:"équilibrée", mp:"équilibrés", fp:"équilibrées", pre:false},
+  {e:"big",         ms:"grand",      fs:"grande",     mp:"grands",     fp:"grandes",     pre:true,  pool:"any"},
+  {e:"small",       ms:"petit",      fs:"petite",     mp:"petits",     fp:"petites",     pre:true,  pool:"any"},
+  {e:"long",        ms:"long",       fs:"longue",     mp:"longs",      fp:"longues",     pre:false, pool:"general"},
+  {e:"short",       ms:"court",      fs:"courte",     mp:"courts",     fp:"courtes",     pre:false, pool:"general"},
+  {e:"young",       ms:"jeune",      fs:"jeune",      mp:"jeunes",     fp:"jeunes",      pre:true,  pool:"person"},
+  {e:"old",         ms:"vieux",      fs:"vieille",    mp:"vieux",      fp:"vieilles",    pre:true,  pool:"any"},
+  {e:"new",         ms:"nouveau",    fs:"nouvelle",   mp:"nouveaux",   fp:"nouvelles",   pre:true,  pool:"general"},
+  {e:"beautiful",   ms:"beau",       fs:"belle",      mp:"beaux",      fp:"belles",      pre:true,  pool:"any"},
+  {e:"good",        ms:"bon",        fs:"bonne",      mp:"bons",       fp:"bonnes",      pre:true,  pool:"any"},
+  {e:"bad",         ms:"mauvais",    fs:"mauvaise",   mp:"mauvais",    fp:"mauvaises",   pre:true,  pool:"any"},
+  // Personality / quality (post-noun) — person only
+  {e:"happy",       ms:"heureux",    fs:"heureuse",   mp:"heureux",    fp:"heureuses",   pre:false, pool:"person"},
+  {e:"sad",         ms:"triste",     fs:"triste",     mp:"tristes",    fp:"tristes",     pre:false, pool:"person"},
+  {e:"kind",        ms:"gentil",     fs:"gentille",   mp:"gentils",    fp:"gentilles",   pre:false, pool:"person"},
+  {e:"intelligent", ms:"intelligent",fs:"intelligente",mp:"intelligents",fp:"intelligentes",pre:false, pool:"person"},
+  {e:"hard-working",ms:"travailleur",fs:"travailleuse",mp:"travailleurs",fp:"travailleuses",pre:false, pool:"person"},
+  {e:"lazy",        ms:"paresseux",  fs:"paresseuse", mp:"paresseux",  fp:"paresseuses", pre:false, pool:"person"},
+  {e:"interesting", ms:"intéressant",fs:"intéressante",mp:"intéressants",fp:"intéressantes",pre:false, pool:"any"},
+  {e:"boring",      ms:"ennuyeux",   fs:"ennuyeuse",  mp:"ennuyeux",   fp:"ennuyeuses",  pre:false, pool:"any"},
+  {e:"funny",       ms:"drôle",      fs:"drôle",      mp:"drôles",     fp:"drôles",      pre:false, pool:"person"},
+  {e:"serious",     ms:"sérieux",    fs:"sérieuse",   mp:"sérieux",    fp:"sérieuses",   pre:false, pool:"person"},
+  {e:"strict",      ms:"strict",     fs:"stricte",    mp:"stricts",    fp:"strictes",    pre:false, pool:"person"},
+  {e:"shy",         ms:"timide",     fs:"timide",     mp:"timides",    fp:"timides",     pre:false, pool:"person"},
+  {e:"proud",       ms:"fier",       fs:"fière",      mp:"fiers",      fp:"fières",      pre:false, pool:"person"},
+  {e:"traditional", ms:"traditionnel",fs:"traditionnelle",mp:"traditionnels",fp:"traditionnelles",pre:false, pool:"any"},
+  {e:"popular",     ms:"populaire",  fs:"populaire",  mp:"populaires", fp:"populaires",  pre:false, pool:"any"},
+  {e:"famous",      ms:"célèbre",    fs:"célèbre",    mp:"célèbres",   fp:"célèbres",    pre:false, pool:"any"},
+  // Health / state — person only
+  {e:"healthy",     ms:"sain",       fs:"saine",      mp:"sains",      fp:"saines",      pre:false, pool:"person"},
+  {e:"ill",         ms:"malade",     fs:"malade",     mp:"malades",    fp:"malades",     pre:false, pool:"person"},
+  {e:"tired",       ms:"fatigué",    fs:"fatiguée",   mp:"fatigués",   fp:"fatiguées",   pre:false, pool:"person"},
+  {e:"balanced",    ms:"équilibré",  fs:"équilibrée", mp:"équilibrés", fp:"équilibrées", pre:false, pool:"any"},
   // Misc
-  {e:"free (of charge)",ms:"gratuit",fs:"gratuite",  mp:"gratuits",   fp:"gratuites",   pre:false},
-  {e:"expensive",   ms:"cher",       fs:"chère",      mp:"chers",      fp:"chères",      pre:false},
-  {e:"easy",        ms:"facile",     fs:"facile",     mp:"faciles",    fp:"faciles",     pre:false},
-  {e:"difficult",   ms:"difficile",  fs:"difficile",  mp:"difficiles", fp:"difficiles",  pre:false},
-  {e:"fast",        ms:"rapide",     fs:"rapide",     mp:"rapides",    fp:"rapides",     pre:false},
-  {e:"slow",        ms:"lent",       fs:"lente",      mp:"lents",      fp:"lentes",      pre:false},
-  {e:"safe",        ms:"sûr",        fs:"sûre",       mp:"sûrs",       fp:"sûres",       pre:false},
-  {e:"dangerous",   ms:"dangereux",  fs:"dangereuse", mp:"dangereux",  fp:"dangereuses", pre:false},
-  {e:"important",   ms:"important",  fs:"importante", mp:"importants", fp:"importantes", pre:false},
-  {e:"social",      ms:"social",     fs:"sociale",    mp:"sociaux",    fp:"sociales",    pre:false},
-  {e:"pretty",      ms:"joli",       fs:"jolie",      mp:"jolis",      fp:"jolies",      pre:true},
+  {e:"free (of charge)",ms:"gratuit",fs:"gratuite",  mp:"gratuits",   fp:"gratuites",   pre:false, pool:"general"},
+  {e:"expensive",   ms:"cher",       fs:"chère",      mp:"chers",      fp:"chères",      pre:false, pool:"general"},
+  {e:"easy",        ms:"facile",     fs:"facile",     mp:"faciles",    fp:"faciles",     pre:false, pool:"any"},
+  {e:"difficult",   ms:"difficile",  fs:"difficile",  mp:"difficiles", fp:"difficiles",  pre:false, pool:"any"},
+  {e:"fast",        ms:"rapide",     fs:"rapide",     mp:"rapides",    fp:"rapides",     pre:false, pool:"any"},
+  {e:"slow",        ms:"lent",       fs:"lente",      mp:"lents",      fp:"lentes",      pre:false, pool:"any"},
+  {e:"safe",        ms:"sûr",        fs:"sûre",       mp:"sûrs",       fp:"sûres",       pre:false, pool:"any"},
+  {e:"dangerous",   ms:"dangereux",  fs:"dangereuse", mp:"dangereux",  fp:"dangereuses", pre:false, pool:"any"},
+  {e:"important",   ms:"important",  fs:"importante", mp:"importants", fp:"importantes", pre:false, pool:"any"},
+  {e:"social",      ms:"social",     fs:"sociale",    mp:"sociaux",    fp:"sociales",    pre:false, pool:"person"},
+  {e:"pretty",      ms:"joli",       fs:"jolie",      mp:"jolis",      fp:"jolies",      pre:true,  pool:"any"},
 ];
 
 // ══════════════════════════════════════════════
@@ -3080,8 +3255,11 @@ function startsWithVowel(word){
 
 // Build a random drill prompt
 function newDrillPrompt(){
-  const noun = DRILL_NOUNS[Math.floor(Math.random()*DRILL_NOUNS.length)];
   const adj  = DRILL_ADJS[Math.floor(Math.random()*DRILL_ADJS.length)];
+  const pool = adj.pool === 'person' ? DRILL_NOUNS_PERSON
+             : adj.pool === 'general' ? DRILL_NOUNS_GENERAL
+             : DRILL_NOUNS; // "any" uses full list
+  const noun = pool[Math.floor(Math.random()*pool.length)];
   const num  = Math.random() < 0.5 ? 'sg' : 'pl';
   const g    = noun.g; // "m" or "f"
 
@@ -3607,14 +3785,31 @@ document.querySelectorAll('#synScreen .accent-btn').forEach(btn => {
 // ══════════════════════════════════════════════
 //  TIME EXPRESSIONS LOGIC
 // ══════════════════════════════════════════════
-let trCorrect = 0, trWrong = 0, trStreak = 0;
+let trCorrect = 0, trWrong = 0, trStreak = 0, trBestStreak = 0;
 let trCurrent = null, trAnswered = false;
 let trQueue = [];
 
 function getTimeProgress(pid){
   try{return JSON.parse(localStorage.getItem('fr_time_'+pid))||{};}catch{return {};}
 }
-function saveTimeProgress(pid,data){localStorage.setItem('fr_time_'+pid,JSON.stringify(data));}
+function saveTimeProgress(pid,data){
+  try{localStorage.setItem('fr_time_'+pid,JSON.stringify(data));}catch(err){console.warn('Storage unavailable',err);}
+}
+
+function getTimePB(pid){
+  const d = getTimeProgress(pid);
+  return d.pb || 0;
+}
+
+function saveTimePBIfBetter(pid, score){
+  const d = getTimeProgress(pid);
+  if(score > (d.pb||0)){
+    d.pb = score;
+    saveTimeProgress(pid, d);
+    return true; // new PB
+  }
+  return false;
+}
 
 function openTimeScreen(){
   showScreen('timeScreen');
@@ -3624,13 +3819,17 @@ function openTimeScreen(){
 }
 
 function updateTimeMenuCount(){
-  document.getElementById('timeCount').textContent = TIME_EXPRESSIONS.length;
+  const pb = currentProfile ? getTimePB(currentProfile.id) : 0;
+  document.getElementById('timeCount').textContent = pb > 0 ? 'PB: '+pb : TIME_EXPRESSIONS.length;
 }
 
 // ── RECOGNITION mode ──
 function startRecogSession(){
-  trCorrect=0; trWrong=0; trStreak=0;
+  trCorrect=0; trWrong=0; trStreak=0; trBestStreak=0;
   updateTRStats();
+  // Load and display existing PB
+  const pb = currentProfile ? getTimePB(currentProfile.id) : 0;
+  document.getElementById('trPB').textContent = pb > 0 ? pb : '–';
   trQueue = [...TIME_EXPRESSIONS].sort(()=>Math.random()-0.5);
   showNextTRCard();
 }
@@ -3707,6 +3906,7 @@ function updateTRStats(){
   document.getElementById('trCorrect').textContent=trCorrect;
   document.getElementById('trWrong').textContent=trWrong;
   document.getElementById('trStreak').textContent=trStreak;
+  if(trStreak > trBestStreak) trBestStreak = trStreak;
 }
 
 document.getElementById('trNextBtn').onclick=()=>showNextTRCard();
@@ -3776,7 +3976,22 @@ document.getElementById('timeModeRecall').onclick=()=>{
   document.getElementById('timeRecogPanel').style.display='none';
 };
 
-document.getElementById('timeBack').onclick=()=>openMenu();
+document.getElementById('timeBack').onclick=()=>{
+  // Save PB if this session's best streak is better
+  if(currentProfile && trBestStreak > 0){
+    const isNew = saveTimePBIfBetter(currentProfile.id, trBestStreak);
+    const pb = getTimePB(currentProfile.id);
+    const total = trCorrect + trWrong;
+    if(total > 0){
+      const msg = isNew
+        ? `⭐ New PB! Best streak: ${trBestStreak} · ${trCorrect}/${total} correct`
+        : `${trCorrect}/${total} correct · Best streak: ${trBestStreak} (PB: ${pb})`;
+      showToast(msg);
+    }
+    updateTimeMenuCount();
+  }
+  openMenu();
+};
 document.getElementById('modeTime').onclick=()=>openTimeScreen();
 
 // ══════════════════════════════════════════════
@@ -3802,17 +4017,12 @@ const UNIT_LABELS = {
 };
 
 // Core mastered check for a single word (French string)
-// "Mastered" = fr-en correct>=1 AND en-fr correct>=1
-//              AND union of both sessions arrays has >= 2 unique dates
+// "Mastered" = total correct answers across both directions >= 3
 function isWordMastered(prog, wordF){
   const fren = prog[wordF+'|fr-en'];
   const enfr = prog[wordF+'|en-fr'];
-  if(!fren || !enfr) return false;
-  if((fren.correct||0) < 1 || (enfr.correct||0) < 1) return false;
-  const s1 = fren.sessions || [];
-  const s2 = enfr.sessions || [];
-  const allDates = new Set([...s1, ...s2]);
-  return allDates.size >= 2;
+  const total = (fren ? (fren.correct||0) : 0) + (enfr ? (enfr.correct||0) : 0);
+  return total >= 3;
 }
 
 function isWordInProgress(prog, wordF){
@@ -3939,7 +4149,7 @@ function buildProgressView(){
       <div class="prog-legend-item"><div class="prog-legend-dot" style="background:var(--surface3)"></div> Not started (${stats.notStarted})</div>
     </div>
     <div class="prog-mastered-note">
-      <strong>Mastered</strong> means correct in both directions (🇫🇷→🇬🇧 and 🇬🇧→🇫🇷) across at least 2 separate study sessions.
+      <strong>Mastered</strong> means 3 or more correct answers across both directions (🇫🇷→🇬🇧 and 🇬🇧→🇫🇷).
     </div>
   </div>`;
 
@@ -4001,6 +4211,119 @@ function openProgressScreen(){
 
 document.getElementById('menuProgressBtn').onclick = () => openProgressScreen();
 document.getElementById('progressBack').onclick = () => openMenu();
+
+// ══════════════════════════════════════════════
+//  EXPRESSIONS — DATA
+// ══════════════════════════════════════════════
+const EXPRESSIONS = [
+  // Food
+  {f:"avoir le cafard", lit:"to have the cockroach", mean:"to feel down / depressed", tag:"😔 feelings"},
+  {f:"tomber dans les pommes", lit:"to fall in the apples", mean:"to faint", tag:"🍎 body"},
+  {f:"avoir d'autres chats à fouetter", lit:"to have other cats to whip", mean:"to have bigger fish to fry", tag:"🐱 animals"},
+  {f:"casser les pieds à quelqu'un", lit:"to break someone's feet", mean:"to annoy someone", tag:"🦶 body"},
+  {f:"avoir le beurre et l'argent du beurre", lit:"to have the butter and the money for the butter", mean:"to have it both ways / want everything", tag:"🧈 food"},
+  {f:"ramener sa fraise", lit:"to bring back one's strawberry", mean:"to show up / stick one's nose in", tag:"🍓 food"},
+  {f:"avoir du pain sur la planche", lit:"to have bread on the board", mean:"to have a lot of work to do", tag:"🍞 school / work"},
+  {f:"se lever du pied gauche", lit:"to get up on the left foot", mean:"to get out of bed on the wrong side", tag:"🛏️ daily life"},
+  // Animals
+  {f:"poser un lapin à quelqu'un", lit:"to put a rabbit on someone", mean:"to stand someone up", tag:"🐰 animals"},
+  {f:"quand les poules auront des dents", lit:"when hens have teeth", mean:"when pigs fly / never", tag:"🐔 animals"},
+  {f:"donner sa langue au chat", lit:"to give one's tongue to the cat", mean:"to give up guessing", tag:"🐱 animals"},
+  {f:"il pleut des cordes", lit:"it's raining ropes", mean:"it's raining cats and dogs", tag:"🌧️ weather"},
+  {f:"avoir le mal du pays", lit:"to have the illness of the country", mean:"to feel homesick", tag:"🏠 family / holidays"},
+  {f:"faire la grasse matinée", lit:"to do the fat morning", mean:"to have a lie-in", tag:"😴 daily life"},
+  // Body
+  {f:"coûter les yeux de la tête", lit:"to cost the eyes from the head", mean:"to cost an arm and a leg", tag:"💰 money"},
+  {f:"avoir les yeux plus grands que le ventre", lit:"to have eyes bigger than one's stomach", mean:"to bite off more than you can chew", tag:"🍽️ food"},
+  {f:"garder la tête hors de l'eau", lit:"to keep one's head out of the water", mean:"to keep one's head above water", tag:"💪 school / work"},
+  {f:"avoir un poil dans la main", lit:"to have a hair in one's hand", mean:"to be bone idle", tag:"😴 personality"},
+  {f:"casser les oreilles", lit:"to break someone's ears", mean:"to be deafeningly loud / to go on and on", tag:"👂 body"},
+  {f:"avoir la chair de poule", lit:"to have hen's flesh", mean:"to have goosebumps", tag:"🐔 body"},
+  // Objects / misc
+  {f:"appeler un chat un chat", lit:"to call a cat a cat", mean:"to call a spade a spade", tag:"🐱 animals"},
+  {f:"mettre les pieds dans le plat", lit:"to put one's feet in the dish", mean:"to put one's foot in it", tag:"🦶 body"},
+  {f:"se noyer dans un verre d'eau", lit:"to drown in a glass of water", mean:"to make a mountain out of a molehill", tag:"💧 personality"},
+  {f:"tenir la chandelle", lit:"to hold the candle", mean:"to play gooseberry / be the third wheel", tag:"🕯️ relationships"},
+  {f:"avoir le coup de foudre", lit:"to have the lightning bolt", mean:"to fall in love at first sight", tag:"⚡ relationships"},
+  // GCSE-relevant
+  {f:"passer une nuit blanche", lit:"to spend a white night", mean:"to pull an all-nighter", tag:"📚 school / work"},
+  {f:"faire la tête", lit:"to make the head", mean:"to sulk", tag:"😒 family"},
+  {f:"avoir le trac", lit:"to have the track", mean:"to have stage fright / nerves", tag:"😰 feelings"},
+  {f:"prendre ses jambes à son cou", lit:"to take one's legs to one's neck", mean:"to run away as fast as possible", tag:"🏃 body"},
+  {f:"avoir la langue bien pendue", lit:"to have one's tongue well hung", mean:"to be a chatterbox", tag:"👅 personality"},
+];
+
+// ══════════════════════════════════════════════
+//  EXPRESSIONS — LOGIC
+// ══════════════════════════════════════════════
+let exprIndex = 0;
+
+function openExprScreen(){
+  exprIndex = 0;
+  renderExprBrowse();
+  renderExprList();
+  // Reset to browse tab
+  document.getElementById('exprBrowsePanel').style.display = '';
+  document.getElementById('exprListPanel').style.display = 'none';
+  document.getElementById('exprModeBrowse').classList.add('active');
+  document.getElementById('exprModeList').classList.remove('active');
+  showScreen('exprScreen');
+}
+
+function renderExprBrowse(){
+  const e = EXPRESSIONS[exprIndex];
+  document.getElementById('exprFrench').textContent = e.f;
+  document.getElementById('exprLiteral').textContent = '"' + e.lit + '"';
+  document.getElementById('exprMeaning').textContent = e.mean;
+  document.getElementById('exprTag').textContent = e.tag;
+  document.getElementById('exprCounter').textContent = (exprIndex+1) + ' / ' + EXPRESSIONS.length;
+  document.getElementById('exprPrev').style.opacity = exprIndex === 0 ? '0.3' : '1';
+  document.getElementById('exprNext').textContent = exprIndex === EXPRESSIONS.length-1 ? '← Back to start' : 'Next →';
+}
+
+function renderExprList(){
+  const body = document.getElementById('exprListBody');
+  body.innerHTML = EXPRESSIONS.map(e => `
+    <div class="expr-list-item">
+      <div class="expr-list-fr">${e.f}</div>
+      <div class="expr-list-lit">"${e.lit}"</div>
+      <div class="expr-list-mean">${e.mean}</div>
+      <div class="expr-list-tag">${e.tag}</div>
+    </div>
+  `).join('');
+}
+
+function injectResultsExpression(){
+  const e = EXPRESSIONS[Math.floor(Math.random() * EXPRESSIONS.length)];
+  document.getElementById('rExprFr').textContent = e.f;
+  document.getElementById('rExprLit').textContent = '"' + e.lit + '"';
+  document.getElementById('rExprMean').textContent = e.mean;
+}
+
+document.getElementById('modeExpr').onclick = () => openExprScreen();
+document.getElementById('exprBack').onclick = () => openMenu();
+
+document.getElementById('exprModeBrowse').onclick = () => {
+  document.getElementById('exprBrowsePanel').style.display = '';
+  document.getElementById('exprListPanel').style.display = 'none';
+  document.getElementById('exprModeBrowse').classList.add('active');
+  document.getElementById('exprModeList').classList.remove('active');
+};
+document.getElementById('exprModeList').onclick = () => {
+  document.getElementById('exprBrowsePanel').style.display = 'none';
+  document.getElementById('exprListPanel').style.display = '';
+  document.getElementById('exprModeBrowse').classList.remove('active');
+  document.getElementById('exprModeList').classList.add('active');
+};
+document.getElementById('exprPrev').onclick = () => {
+  if(exprIndex > 0){ exprIndex--; renderExprBrowse(); }
+};
+document.getElementById('exprNext').onclick = () => {
+  exprIndex = exprIndex === EXPRESSIONS.length-1 ? 0 : exprIndex+1;
+  renderExprBrowse();
+};
+
+
 
 // ══════════════════════════════════════════════
 //  INIT

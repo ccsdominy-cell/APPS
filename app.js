@@ -3509,6 +3509,7 @@ function buildProgressView(){
 function openProgressScreen(){
   buildProgressView();
   showScreen('progressScreen');
+  document.getElementById('progressBack').onclick = () => openMenu();
 }
 
 document.getElementById('menuProgressBtn').onclick = () => openProgressScreen();

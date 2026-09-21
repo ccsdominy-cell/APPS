@@ -1743,12 +1743,10 @@ function toggleSettings(){
   const panel=document.getElementById('settingsPanel');
   const btn=document.getElementById('menuSettingsBtn');
   const modes=document.getElementById('studyModeSection');
-  const menuBody=document.getElementById('menuBody');
   const open=panel.style.display==='none';
   panel.style.display=open?'block':'none';
   if(modes) modes.style.display=open?'none':'';
-  if(menuBody) menuBody.style.display=open?'none':'';
-  if(btn) btn.style.color=open?'var(--gold)':'';
+    if(btn) btn.style.color=open?'var(--gold)':'';
 }
 
 function toggleProgress(){

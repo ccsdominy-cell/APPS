@@ -1720,7 +1720,12 @@ function openMenu(){
   loadProfilePrefs();
   showScreen('menuScreen');
   const av=document.getElementById('menuAvatar');
-  av.onclick = () => openMenu();
+  av.onclick = () => {
+  const s=document.getElementById('settingsPanel');
+  const p=document.getElementById('progressPanel');
+  if(s && s.style.display!=='none') toggleSettings();
+  if(p && p.style.display!=='none') toggleProgress();
+};
   av.style.background=currentProfile.color+'22';
   av.style.color=currentProfile.color;
   av.textContent=currentProfile.name[0].toUpperCase();

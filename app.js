@@ -1741,8 +1741,10 @@ function openMenu(){
 function toggleSettings(){
   const panel=document.getElementById('settingsPanel');
   const btn=document.getElementById('menuSettingsBtn');
+  const modes=document.getElementById('studyModeSection');
   const open=panel.style.display==='none';
   panel.style.display=open?'block':'none';
+  if(modes) modes.style.display=open?'none':'';
   if(btn) btn.style.color=open?'var(--gold)':'';
 }
 
@@ -3384,7 +3386,7 @@ function makeCollapsible(id, headerHTML, bodyHTML, startOpen=false){
     </div>
   </div>`;
 }
-
+const stats = computeProgressStats(pid);
 function toggleProgSection(id){
   const body = document.getElementById('prog-body-'+id);
   const tog  = document.getElementById('prog-toggle-'+id);

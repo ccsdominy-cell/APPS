@@ -5620,7 +5620,7 @@ function updateDailyGoalUI(){
   // Update subtext
   const sub = document.getElementById('goalSubtext');
   if(sub){
-    if(count === 0) sub.textContent = 'Tap to start — balanced across all themes';
+    if(count === 0) sub.textContent = 'Tap to start your daily flashcards';
     else if(count < DAILY_GOAL) sub.textContent = (DAILY_GOAL - count) + ' words to go!';
     else if(count < DAILY_GOAL * 2) sub.textContent = '✅ Goal done! Keep going for a double day ⚡';
     else sub.textContent = '⚡ Double day achieved! Amazing work!';

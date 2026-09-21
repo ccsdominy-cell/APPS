@@ -1749,6 +1749,21 @@ function toggleSettings(){
   if(btn) btn.style.color=open?'var(--gold)':'';
 }
 
+function toggleProgress(){
+  const panel=document.getElementById('progressPanel');
+  const btn=document.getElementById('menuProgressBtn');
+  const modes=document.getElementById('studyModeSection');
+  const menuBody=document.getElementById('menuBody');
+  const settings=document.getElementById('settingsPanel');
+  const open=panel.style.display==='none';
+  if(open && settings.style.display!=='none') toggleSettings();
+  if(open) buildProgressView();
+  panel.style.display=open?'block':'none';
+  if(modes) modes.style.display=open?'none':'';
+  if(menuBody) menuBody.style.display=open?'none':'';
+  if(btn) btn.style.color=open?'var(--gold)':'';
+}
+
 function updateSettingsSummary(){
   const el=document.getElementById('settingsSummary');
   if(!el) return;

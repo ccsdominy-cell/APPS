@@ -3397,6 +3397,7 @@ function toggleProgSection(id){
 function buildProgressView(){
   const pid = currentProfile.id;
   const stats = computeProgressStats(pid);
+  const prog = getProgress(pid);
   const lastActive = formatLastActive(pid);
   const container = document.getElementById('progScreenBody');
 

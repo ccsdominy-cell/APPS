@@ -1553,6 +1553,7 @@ let activeDirection = "fr-en"; // "fr-en" | "en-fr" | "both"
 let currentMode = "normal";
 let deck = [], queue = [], sessionCorrect = 0, sessionWrong = 0;
 let isFlipped = false, timerInterval = null, timerLeft = 10;
+let isMCQMode = false;
 
 // ══════════════════════════════════════════════
 //  STORAGE
@@ -1966,8 +1967,9 @@ function startStudy(mode){
   // Show/hide faux direction toggle
   document.getElementById('fauxDirToggle').style.display=isFaux?'flex':'none';
   // Show/hide MCQ vs normal answer area
-  document.getElementById('answerArea').classList.toggle('hidden',isFaux);
-  document.getElementById('mcqArea').classList.toggle('hidden',!isFaux);
+  isMCQMode = (mode==='normal'||mode==='hard');
+  document.getElementById('answerArea').classList.toggle('hidden',isFaux||isMCQMode);
+  document.getElementById('mcqArea').classList.toggle('hidden',!isFaux&&!isMCQMode);
   showNextCard();
 }
 
@@ -1986,9 +1988,9 @@ function showNextCard(){
 
   // Faux ribbon
   document.getElementById('fauxRibbon').classList.toggle('show',isFaux);
-  document.getElementById('cardTap').classList.toggle('hidden',isFaux);
-  // Card is non-interactive in faux mode
-  document.getElementById('cardWrap').style.cursor=isFaux?'default':'pointer';
+  document.getElementById('cardTap').classList.toggle('hidden',isFaux||isMCQMode);
+  // Card is non-interactive in faux/MCQ mode
+  document.getElementById('cardWrap').style.cursor=(isFaux||isMCQMode)?'default':'pointer';
 
   if(isFaux){
     // Forward: show French word → pick correct English
@@ -2023,6 +2025,7 @@ function showNextCard(){
     document.getElementById('studyDirBadge').textContent=isFrEn?'🇫🇷 French → 🇬🇧 English':'🇬🇧 English → 🇫🇷 French';
     document.getElementById('cardInner').classList.remove('flipped');
     document.getElementById('answerArea').classList.add('hidden');
+    if(isMCQMode) buildVocabMCQ(v, v.dir==='fr-en');
   }
 
   const done = deck.length - queue.length;
@@ -2056,6 +2059,7 @@ function speakFrench(){
 
 function flipCard(){
   if(currentMode==='faux')return; // MCQ handles its own reveal
+  if(isMCQMode)return; // MCQ handles its own reveal
   if(isFlipped)return;
   isFlipped=true;
   document.getElementById('cardInner').classList.add('flipped');
@@ -2136,7 +2140,7 @@ function markAnswer(correct){
   const meta=getProfileMeta(currentProfile.id);
   meta.lastActive=todayISO();
   saveProfileMeta(currentProfile.id,meta);
-  if(currentMode!=='faux') showNextCard();
+  if(currentMode!=='faux'&&!isMCQMode) showNextCard();
 }
 
 document.getElementById('btnWrong').onclick=()=>markAnswer(false);
@@ -2258,6 +2262,72 @@ document.getElementById('mcqNext').onclick = () => {
   // queue was already shifted by markAnswer; just show next
   showNextCard();
 };
+
+function buildVocabMCQ(v, isFrEn){
+  fauxAnswered = false;
+  // Prefer distractors of the same part-of-speech; fall back to any filtered word
+  const filtered = getFilteredVocab().filter(x => x.f !== v.f);
+  const samePos  = filtered.filter(x => x.pos === v.pos);
+  const pool     = samePos.length >= 3 ? samePos : filtered;
+
+  const correctAnswer = isFrEn ? v.e : v.f;
+  const distractors   = [...new Set(
+    shuffleArr(pool).map(x => isFrEn ? x.e : x.f).filter(t => t !== correctAnswer)
+  )].slice(0, 3);
+
+  const options = shuffleArr([
+    {text: correctAnswer,       isCorrect: true},
+    {text: distractors[0]||'—', isCorrect: false},
+    {text: distractors[1]||'—', isCorrect: false},
+    {text: distractors[2]||'—', isCorrect: false},
+  ]);
+
+  const btns = [0,1,2,3].map(i => document.getElementById('mcqBtn'+i));
+  btns.forEach((btn, i) => {
+    btn.textContent = options[i].text;
+    btn.className   = 'mcq-btn';
+    btn.disabled    = false;
+    btn.onclick     = () => vocabRevealAnswer(options[i], v, isFrEn);
+  });
+
+  document.getElementById('mcqExplanation').classList.remove('show');
+  document.getElementById('mcqExplanation').innerHTML = '';
+  document.getElementById('mcqNext').style.display    = 'none';
+}
+
+function vocabRevealAnswer(chosen, v, isFrEn){
+  if(fauxAnswered) return;
+  fauxAnswered = true;
+
+  const correct     = chosen && chosen.isCorrect;
+  const correctText = isFrEn ? v.e : v.f;
+
+  // Flip the card to reveal the answer
+  document.getElementById('cardInner').classList.add('flipped');
+
+  const btns = [0,1,2,3].map(i => document.getElementById('mcqBtn'+i));
+  btns.forEach(btn => {
+    btn.disabled = true;
+    if(btn.textContent === correctText) btn.className = 'mcq-btn reveal';
+  });
+  if(chosen){
+    const chosenBtn = btns.find(b => b.textContent === chosen.text);
+    if(chosenBtn) chosenBtn.className = correct ? 'mcq-btn correct' : 'mcq-btn wrong';
+  }
+
+  const exp = document.getElementById('mcqExplanation');
+  if(correct){
+    exp.innerHTML = `✅ <strong>Correct!</strong> <span class="correct-en">${v.f}</span> = <span class="correct-en">${v.e}</span>`;
+  } else {
+    const hint = chosen ? `❌ You chose "<span class="trap">${chosen.text}</span>". ` : '';
+    exp.innerHTML = `${hint}<strong>${v.f}</strong> means <span class="correct-en">${v.e}</span>`;
+  }
+  exp.classList.add('show');
+  document.getElementById('mcqNext').style.display = 'block';
+
+  markAnswer(correct);
+}
+
 
 function shuffleArr(arr){
   return [...arr].sort(()=>Math.random()-0.5);

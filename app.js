@@ -5856,8 +5856,9 @@ function startTodaysGoal(){
   badge2.style.display = '';
   document.getElementById('timerWrap').classList.remove('show');
   document.getElementById('fauxDirToggle').style.display = 'none';
-  document.getElementById('answerArea').classList.remove('hidden');
-  document.getElementById('mcqArea').classList.add('hidden');
+  isMCQMode = true;
+  document.getElementById('answerArea').classList.add('hidden');
+  document.getElementById('mcqArea').classList.remove('hidden');
   showNextCard();
 }
 

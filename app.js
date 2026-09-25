@@ -3488,7 +3488,7 @@ function buildProgressView(){
       <div class="prog-tier-sub">${stats.byTier.H.inProgress} in progress</div>
     </div>
   </div>`;
-  html += makeCollapsible('tier', 'By Tier', tierBody, true);
+  html += makeCollapsible('tier', 'By Tier', tierBody, false);
 
   // ── Theme/unit breakdowns ──
   ['T1','T2','T3'].forEach((theme, ti) => {
@@ -3517,7 +3517,7 @@ function buildProgressView(){
     });
 
     const headerHTML = `${THEME_LABELS[theme]} <span style="font-size:0.72rem;color:var(--text2);font-weight:400;margin-left:6px">${thMastered}/${thTotal} · ${thPct}%</span>`;
-    html += makeCollapsible('theme-'+theme, headerHTML, body, ti===0);
+    html += makeCollapsible('theme-'+theme, headerHTML, body, false);
   });
 
   container.innerHTML = html;

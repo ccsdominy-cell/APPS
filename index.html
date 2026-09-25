@@ -52,7 +52,7 @@
     <button class="back-btn" id="menuBack">←</button>
     <div class="user-info">
       <div class="user-avatar" id="menuAvatar"></div>
-      <span class="user-name" id="menuName"></span> <span id="menuLangFlag" style="font-size:1rem"></span>
+      <span class="user-name" id="menuName" style="display:none"></span> <span id="menuLangFlag" style="font-size:1rem"></span>
     </div>
     <button class="back-btn" id="menuSettingsBtn" title="Settings" style="font-size:1.1rem" onclick="toggleSettings()">⚙️</button>
     <button class="back-btn" id="menuProgressBtn" title="Progress" style="font-size:1.1rem" onclick="toggleProgress()">📊</button>
@@ -106,7 +106,7 @@
     </div>
    
     <!-- Settings panel (opened via ⚙️ in top bar) -->
-   <div class="settings-panel" id="settingsPanel" style="display:none;position:absolute;top:60px;left:0;right:0;bottom:0;overflow-y:auto;z-index:10">
+ <div class="settings-panel" id="settingsPanel" style="display:none;position:fixed;top:60px;left:0;right:0;bottom:0;overflow-y:auto;z-index:10">
       <div class="settings-section-label">Select Language Direction</div>
       <div class="settings-hint">Choose whether to study French→English, English→French, or both ways.</div>
       <div id="dirChips"></div>
@@ -138,7 +138,7 @@
         </div>
       </div>
     </div>
-<div id="progressPanel" style="display:none;position:absolute;top:60px;left:0;right:0;bottom:0;overflow-y:auto;z-index:10;padding:1rem">
+<div id="progressPanel" style="display:none;position:fixed;top:60px;left:0;right:0;bottom:0;overflow-y:auto;z-index:10;padding:1rem">
   <div id="progScreenBody"></div>
 </div>
     

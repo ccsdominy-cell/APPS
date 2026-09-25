@@ -3520,7 +3520,12 @@ function buildProgressView(){
     html += makeCollapsible('theme-'+theme, headerHTML, body, false);
   });
 
-  container.innerHTML = html;
+container.innerHTML = html;
+const calDiv = document.createElement('div');
+calDiv.className = 'weekly-cal';
+calDiv.id = 'weeklyCalProgress';
+container.insertBefore(calDiv, container.firstChild);
+updateWeeklyCalendar();
 }
 
 function openProgressScreen(){
@@ -5784,7 +5789,8 @@ function updateWeeklyCalendar(){
   const today = todayISO();
   const weekDates = getWeekDates();
   const DAY_LABELS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const cal = document.getElementById('weeklyCal');
+  ['weeklyCal','weeklyCalProgress'].forEach(calId => {
+  const cal = document.getElementById(calId);
   if(!cal) return;
   cal.innerHTML = '';
   weekDates.forEach((date, i) => {
@@ -5804,7 +5810,7 @@ function updateWeeklyCalendar(){
     if(isToday) dotClass += ' today';
     div.innerHTML = '<div class="cal-day-label">'+DAY_LABELS[i]+'</div><div class="'+dotClass+'">'+emoji+'</div>';
     cal.appendChild(div);
-  });
+  });  });
 }
 
 function recordDailyHistory(pid, correct){

@@ -36,8 +36,9 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
-// Fetch: cache-first for same-origin + Google Fonts, network-first otherwise
-self.addEventListener('fetch', e => {
+// : cache-first for same-origin + Google Fonts, network-first otherwise
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
   const url = new URL(e.request.url);
   const isAppFile = url.origin === self.location.origin;
   const isFontFile = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';

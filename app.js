@@ -1879,15 +1879,11 @@ function updateMenuStats(){
     }
     if(p.wrong>p.correct&&p.wrong>0) hardCount++;
   });
-  document.getElementById('statLearned').textContent=masteredCount;
-  document.getElementById('statHard').textContent=hardCount||0;
   updateLevelUI(masteredCount);
   // Today stat
   if(currentProfile){
     const dp = getDailyProgress(currentProfile.id);
-    document.getElementById('statToday').textContent = dp.correct||0;
-    document.getElementById('statStreak').textContent = dp.streak||0;
-  }
+    }
   const filtered=getFilteredVocab();
   const hardF=getHardVocab();
   const fauxF=getFauxVocab();

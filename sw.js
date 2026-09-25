@@ -1,4 +1,4 @@
-const CACHE = 'french-gcse-v12';
+const CACHE = 'french-gcse-v13';
 
 const FILES = [
   './',

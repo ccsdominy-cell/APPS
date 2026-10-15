@@ -5798,8 +5798,8 @@ function updateWeeklyCalendar(){
     let dotClass = 'cal-day-dot';
     let emoji = '';
     if(!isFuture){
-      if(entry.correct >= DAILY_GOAL * 2){ dotClass += ' double'; emoji = '⚡'; }
-      else if(entry.correct >= DAILY_GOAL){ dotClass += ' done'; emoji = '✓'; }
+     if(entry.correct >= 40){ dotClass += ' double'; emoji = '⚡'; }
+      else if(entry.correct >= 20){ dotClass += ' done'; emoji = '✓'; }
       else if(entry.frozen){ dotClass += ' frozen'; emoji = '❄️'; }
       else if(date < today){ dotClass += ' missed'; emoji = ''; }
     }

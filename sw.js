@@ -1,4 +1,4 @@
-const CACHE = 'french-gcse-v19';
+const CACHE = 'french-gcse-v20';
 
 const FILES = [
   './',
@@ -36,26 +36,26 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
-// : cache-first for same-origin + Google Fonts, network-first otherwise
+// cache-first for same-origin + Google Fonts, network-first otherwise
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
-  const url = new URL(e.request.url);
+  const url = new URL(event.request.url);
   const isAppFile = url.origin === self.location.origin;
   const isFontFile = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
 
   if (isAppFile || isFontFile) {
-    e.respondWith(
-      caches.match(e.request).then(cached => {
+    event.respondWith(
+      caches.match(event.request).then(cached => {
         if (cached) return cached;
-        return fetch(e.request).then(response => {
+        return fetch(event.request).then(response => {
           if (response && response.status === 200) {
             const clone = response.clone();
-            caches.open(CACHE).then(cache => cache.put(e.request, clone));
+            caches.open(CACHE).then(cache => cache.put(event.request, clone));
           }
           return response;
         }).catch(() => {
           // If offline and not cached, return the app shell for navigation requests
-          if (e.request.mode === 'navigate') return caches.match('./index.html');
+          if (event.request.mode === 'navigate') return caches.match('./index.html');
         });
       })
     );

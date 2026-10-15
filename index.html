@@ -49,7 +49,7 @@
 <!-- MENU SCREEN -->
 <div class="screen hidden" id="menuScreen" style="position:relative">
   <div class="top-bar">
-    <button class="back-btn" id="menuBack">←</button>
+    <button class="back-btn" id="menuBack">Profiles</button>
     <div class="user-info">
       <div class="user-avatar" id="menuAvatar"></div>
       <span class="user-name" id="menuName" style="display:none"></span> <span id="menuLangFlag" style="font-size:1rem"></span>
@@ -99,6 +99,9 @@
    
     <!-- Settings panel (opened via ⚙️ in top bar) -->
  <div class="settings-panel" id="settingsPanel" style="display:none;position:fixed;top:60px;left:0;right:0;bottom:0;overflow-y:auto;z-index:10">
+  <div class="panel-done-row">
+    <button class="panel-done-btn" onclick="toggleSettings()">Done ✓</button>
+  </div>
       <div class="settings-section-label">Select Language Direction</div>
       <div class="settings-hint">Choose whether to study French→English, English→French, or both ways.</div>
       <div id="dirChips"></div>
@@ -131,6 +134,9 @@
       </div>
     </div>
 <div id="progressPanel" style="display:none;position:fixed;top:60px;left:0;right:0;bottom:0;overflow-y:auto;z-index:10;padding:1rem;background:var(--bg)">
+  <div class="panel-done-row">
+    <button class="panel-done-btn" onclick="toggleProgress()">Done ✓</button>
+  </div>
   <div id="progScreenBody"></div>
 </div>
     

@@ -1742,6 +1742,22 @@ function openMenu(){
   document.getElementById('settingsPanel').style.display='none';
   const sb=document.getElementById('menuSettingsBtn');
   if(sb) sb.style.color='';
+  updateBackBtn();
+}
+
+function updateBackBtn(){
+  const btn = document.getElementById('menuBack');
+  if(!btn) return;
+  // Priority 1: active study session
+  const studyScreen = document.getElementById('studyScreen');
+  if(studyScreen && studyScreen.style.display !== 'none'){
+    btn.textContent = '← Back';
+    return;
+  }
+  // Priority 2: panel open
+  const settingsOpen = document.getElementById('settingsPanel').style.display !== 'none';
+  const progressOpen = document.getElementById('progressPanel').style.display !== 'none';
+  btn.textContent = (settingsOpen || progressOpen) ? '← Close' : 'Profiles';
 }
 
 function toggleSettings(){
@@ -1751,7 +1767,8 @@ function toggleSettings(){
   const open=panel.style.display==='none';
   panel.style.display=open?'block':'none';
   if(modes) modes.style.display=open?'none':'';
-    if(btn) btn.style.color=open?'var(--gold)':'';
+  if(btn) btn.style.color=open?'var(--gold)':'';
+  updateBackBtn();
 }
 
 function toggleProgress(){
@@ -1763,6 +1780,7 @@ function toggleProgress(){
   if(open) buildProgressView();
   panel.style.display=open?'block':'none';
   if(btn) btn.style.color=open?'var(--gold)':'';
+  updateBackBtn();
 }
 
 function updateSettingsSummary(){
@@ -1895,7 +1913,18 @@ function updateMenuStats(){
       SYNONYM_GROUPS.filter(g=>g.members.length>=2).length+' groups';
   }
 }
-document.getElementById('menuBack').onclick=()=>{showScreen('profileScreen');};
+document.getElementById('menuBack').onclick = () => {
+  const studyScreen = document.getElementById('studyScreen');
+  if(studyScreen && studyScreen.style.display !== 'none'){
+    openMenu();
+    return;
+  }
+  const settingsOpen = document.getElementById('settingsPanel').style.display !== 'none';
+  const progressOpen = document.getElementById('progressPanel').style.display !== 'none';
+  if(settingsOpen){ toggleSettings(); return; }
+  if(progressOpen){ toggleProgress(); return; }
+  showScreen('profileScreen');
+};
 
 document.getElementById('modeHard').onclick=()=>{
   if(getHardVocab().length===0){showToast('No hard words yet! Keep studying 💪');return;}
@@ -1971,6 +2000,7 @@ function startStudy(mode){
   queue=[...deck];
   if(queue.length===0){showToast('No cards match your filters!');return;}
   showScreen('studyScreen');
+  updateBackBtn();
   const badge=document.getElementById('studyModeBadge');
   const isFaux=mode==='faux';
   badge.textContent=mode==='hard'?'💪 Hard Words':isFaux?'🪤 Faux Amis':'🃏 Flashcards';
@@ -5867,6 +5897,7 @@ function startTodaysGoal(){
   queue = [...deck];
   if(queue.length === 0){ showToast('No cards match your filters!'); return; }
   showScreen('studyScreen');
+  updateBackBtn();
   // Badge row: 🎯 Today's Goal · 🔥 streak · 🃏 Flashcard Challenge
   const dp = getDailyProgress(currentProfile.id);
   const streak = dp.streak || 0;

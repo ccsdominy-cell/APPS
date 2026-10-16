@@ -3325,13 +3325,15 @@ function isWordInProgress(prog, wordF){
   return (fren && (fren.correct||0)>0) || (enfr && (enfr.correct||0)>0);
 }
 
-// Compute full progress stats for a profile
-function computeProgressStats(pid){
+// Compute full progress stats for a profile — filtered by active tiers
+function computeProgressStats(pid, tiersFilter){
+  if(!tiersFilter) tiersFilter = activeTiers;
   const prog = getProgress(pid);
 
-  // Deduplicate VOCAB by French word (some words appear in multiple units)
+  // Deduplicate VOCAB by French word, filtered by active tiers
   const seen = new Set();
   const words = VOCAB.filter(v => {
+    if(!tiersFilter.includes(v.t)) return false;
     if(seen.has(v.f)) return false;
     seen.add(v.f);
     return true;
@@ -3340,12 +3342,9 @@ function computeProgressStats(pid){
   const total = words.length;
   let mastered = 0, inProgress = 0;
 
-  // By unit: {u: {total, mastered, inProgress, F:{total,mastered}, H:{total,mastered}}}
+  // By unit: {u: {total, mastered, inProgress}}
   const byUnit = {};
-  for(let u=1;u<=9;u++) byUnit[u]={total:0,mastered:0,inProgress:0,F:{total:0,mastered:0},H:{total:0,mastered:0}};
-
-  // By tier overall
-  const byTier = {F:{total:0,mastered:0,inProgress:0}, H:{total:0,mastered:0,inProgress:0}};
+  for(let u=1;u<=9;u++) byUnit[u]={total:0,mastered:0,inProgress:0};
 
   words.forEach(v => {
     const m = isWordMastered(prog, v.f);
@@ -3358,18 +3357,10 @@ function computeProgressStats(pid){
       byUnit[u].total++;
       if(m) byUnit[u].mastered++;
       if(ip) byUnit[u].inProgress++;
-      const tier = v.t==='F'?'F':'H';
-      byUnit[u][tier].total++;
-      if(m) byUnit[u][tier].mastered++;
     }
-
-    const tier = v.t==='F'?'F':'H';
-    byTier[tier].total++;
-    if(m) byTier[tier].mastered++;
-    if(ip) byTier[tier].inProgress++;
   });
 
-  return {total, mastered, inProgress, notStarted: total-mastered-inProgress, byUnit, byTier};
+  return {total, mastered, inProgress, notStarted: total-mastered-inProgress, byUnit};
 }
 
 function formatLastActive(pid){
@@ -3417,121 +3408,110 @@ function toggleProgSection(id){
   tog.classList.toggle('open', open);
 }
 
+// Badge state for a unit circle: 'green' (≥80% mastered), 'amber' (any progress), 'gray' (untouched), 'none' (no words in tier)
+function unitBadgeState(u, prog, tiersFilter){
+  const words = [...new Set(
+    VOCAB.filter(v => v.u===u && tiersFilter.includes(v.t)).map(v => v.f)
+  )];
+  if(words.length===0) return 'none';
+  const mastered = words.filter(f => isWordMastered(prog, f)).length;
+  const inProg   = words.filter(f => isWordInProgress(prog, f)).length;
+  if(mastered/words.length >= 0.8) return 'green';
+  if(mastered > 0 || inProg > 0) return 'amber';
+  return 'gray';
+}
+
+// Launch a study session filtered to the given units
+function studyTheme(units){
+  activeUnits = units;
+  saveProfilePrefs();
+  updateSettingsSummary();
+  toggleProgress();
+  startStudy('normal');
+}
+
 function buildProgressView(){
   const pid = currentProfile.id;
-  const stats = computeProgressStats(pid);
   const prog = getProgress(pid);
-  const lastActive = formatLastActive(pid);
+  const stats = computeProgressStats(pid); // uses activeTiers
   const container = document.getElementById('progScreenBody');
 
-  // ── Hero card ──
-  const pct_m  = stats.total ? (stats.mastered/stats.total*100).toFixed(0)  : 0;
-  const pct_ip = stats.total ? (stats.inProgress/stats.total*100).toFixed(0): 0;
+  const themeConfig = [
+    {key:'T1', label:'Theme 1 · People & Lifestyle', units:[1,2,3], colour:'#58a6ff', colourAlpha:'#58a6ff18'},
+    {key:'T2', label:'Theme 2 · Popular Culture',    units:[4,5,6], colour:'#3fb950', colourAlpha:'#3fb95018'},
+    {key:'T3', label:'Theme 3 · Communication',      units:[7,8,9], colour:'#bc8cff', colourAlpha:'#bc8cff18'},
+  ];
 
-  // Build donut chart data
-  const themeData = [
-    {label:'Theme 1 - People & Lifestyle', units:[1,2,3], colour:'#58a6ff'},
-    {label:'Theme 2 - Popular Culture',    units:[4,5,6], colour:'#3fb950'},
-    {label:'Theme 3 - Communication',      units:[7,8,9], colour:'#bc8cff'},
-  ].map(function(t){
-    const total = [...new Set(VOCAB.filter(v=>t.units.includes(v.u)).map(v=>v.f))].length;
-    const mastered = [...new Set(VOCAB.filter(v=>t.units.includes(v.u)).map(v=>v.f))].filter(f=>isWordMastered(prog,f)).length;
-    return {label:t.label, colour:t.colour, total:total, mastered:mastered, pct: total ? Math.round(mastered/total*100) : 0};
+  const themeStats = themeConfig.map(t => {
+    const thTotal    = t.units.reduce((s,u)=>s+stats.byUnit[u].total,0);
+    const thMastered = t.units.reduce((s,u)=>s+stats.byUnit[u].mastered,0);
+    const thInProg   = t.units.reduce((s,u)=>s+stats.byUnit[u].inProgress,0);
+    const pct = thTotal ? Math.round(thMastered/thTotal*100) : 0;
+    return {...t, thTotal, thMastered, thInProg, pct};
   });
-  const cx=60,cy=60,r=50,circ=2*Math.PI*r;
-  let offset=0;
-  const totalAll = themeData.reduce(function(s,t){return s+t.total;},0);
-  let donutSegs = '';
-  themeData.forEach(function(t){
-    const frac = totalAll ? t.total/totalAll : 0.333;
-    const masteredFrac = t.total ? t.mastered/t.total : 0;
-    const bgDash = (circ*frac) + ' ' + (circ - circ*frac);
-    const bgOff = -(offset*circ);
-    const fillDash = (circ*frac*masteredFrac) + ' ' + (circ - circ*frac*masteredFrac);
-    const fillOff = -(offset*circ);
-    donutSegs += '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+t.colour+'33" stroke-width="14" stroke-dasharray="'+bgDash+'" stroke-dashoffset="'+bgOff+'" transform="rotate(-90 '+cx+' '+cy+')"/>';
-    donutSegs += '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+t.colour+'" stroke-width="14" stroke-dasharray="'+fillDash+'" stroke-dashoffset="'+fillOff+'" transform="rotate(-90 '+cx+' '+cy+')" stroke-linecap="round"/>';
-    offset += frac;
-  });
-  let legendHTML = '';
-  themeData.forEach(function(t){
-    legendHTML += '<div class="donut-legend-item"><div class="donut-legend-dot" style="background:'+t.colour+'"></div><div class="donut-legend-label">'+t.label+'</div><div class="donut-legend-pct">'+t.pct+'%</div></div>';
-  });
-  const donutHTML = '<div class="prog-section"><div class="donut-wrap"><svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">'+donutSegs+'<text x="60" y="55" text-anchor="middle" font-family="Fraunces,serif" font-size="16" font-weight="700" fill="#e6edf3">'+stats.mastered+'</text><text x="60" y="70" text-anchor="middle" font-size="9" fill="#8b949e">mastered</text></svg><div class="donut-legend">'+legendHTML+'</div></div></div>';
-  let html = donutHTML + `
-  <div class="prog-hero">
-    <div class="prog-hero-name">${currentProfile.name}</div>
-    <div class="prog-hero-last">Last active: ${lastActive}</div>
-    <div class="prog-overall-nums">
-      <span class="prog-overall-big">${stats.mastered}</span>
-      <span class="prog-overall-of">/ ${stats.total}</span>
-      <span class="prog-overall-label">words mastered</span>
+
+  // Weakest theme = lowest mastered%, only among themes that have words
+  const withWords = themeStats.filter(t=>t.thTotal>0);
+  const weakest = withWords.length ? withWords.reduce((a,b)=>a.pct<=b.pct?a:b) : null;
+
+  const tierCtx = activeTiers.length===2 ? 'All tiers' : activeTiers.includes('F') ? 'Foundation tier' : 'Higher tier';
+  const pct_m  = stats.total ? Math.round(stats.mastered/stats.total*100) : 0;
+  const pct_ip = stats.total ? Math.round(stats.inProgress/stats.total*100) : 0;
+
+  let html = `
+  <div class="prog-headline">
+    <div class="prog-headline-num">${stats.mastered}</div>
+    <div class="prog-headline-label">words locked in</div>
+    <div class="prog-headline-ctx">${tierCtx} · ${stats.total} words total</div>
+    <div class="prog-bar-wrap" style="height:8px;margin-top:12px">
+      <div style="height:100%;display:flex;border-radius:10px;overflow:hidden">
+        <div style="width:${pct_m}%;background:var(--green);transition:width 0.6s ease"></div>
+        <div style="width:${pct_ip}%;background:var(--gold);transition:width 0.6s ease"></div>
+      </div>
     </div>
-    ${makePBar(stats.mastered, stats.inProgress, stats.total, '10px')}
-    <div class="prog-legend">
-      <div class="prog-legend-item"><div class="prog-legend-dot" style="background:var(--green)"></div> Mastered (${stats.mastered})</div>
-      <div class="prog-legend-item"><div class="prog-legend-dot" style="background:var(--gold)"></div> In progress (${stats.inProgress})</div>
-      <div class="prog-legend-item"><div class="prog-legend-dot" style="background:var(--surface3)"></div> Not started (${stats.notStarted})</div>
-    </div>
-    <div class="prog-mastered-note">
-      <strong>Mastered</strong> means at least 1 correct answer in each direction (🇫🇷→🇬🇧 and 🇬🇧→🇫🇷).
+    <div class="prog-bar-legend">
+      <span><span class="prog-dot" style="background:var(--green)"></span>Locked in (${stats.mastered})</span>
+      <span><span class="prog-dot" style="background:var(--gold)"></span>Learning (${stats.inProgress})</span>
+      <span><span class="prog-dot" style="background:var(--surface3)"></span>To do (${stats.notStarted})</span>
     </div>
   </div>`;
 
-  // ── Tier breakdown ──
-  const tierBody = `
-  <div class="prog-tier-grid">
-    <div class="prog-tier-card">
-      <div class="prog-tier-label">Foundation</div>
-      <div class="prog-tier-nums" style="color:var(--green)">${stats.byTier.F.mastered}<span style="font-size:0.75rem;color:var(--text2);font-family:'Outfit',sans-serif;font-weight:400"> / ${stats.byTier.F.total}</span></div>
-      ${makePBar(stats.byTier.F.mastered, stats.byTier.F.inProgress, stats.byTier.F.total, '6px')}
-      <div class="prog-tier-sub">${stats.byTier.F.inProgress} in progress</div>
-    </div>
-    <div class="prog-tier-card">
-      <div class="prog-tier-label">Higher</div>
-      <div class="prog-tier-nums" style="color:var(--purple)">${stats.byTier.H.mastered}<span style="font-size:0.75rem;color:var(--text2);font-family:'Outfit',sans-serif;font-weight:400"> / ${stats.byTier.H.total}</span></div>
-      ${makePBar(stats.byTier.H.mastered, stats.byTier.H.inProgress, stats.byTier.H.total, '6px')}
-      <div class="prog-tier-sub">${stats.byTier.H.inProgress} in progress</div>
-    </div>
-  </div>`;
-  html += makeCollapsible('tier', 'By Tier', tierBody, false);
+  themeStats.forEach(t => {
+    const isWeak = weakest && t.key===weakest.key && t.pct < 80;
+    const pct_bar_m  = t.thTotal ? (t.thMastered/t.thTotal*100).toFixed(1) : 0;
+    const pct_bar_ip = t.thTotal ? (t.thInProg/t.thTotal*100).toFixed(1) : 0;
+    const toGo = t.thTotal - t.thMastered;
 
-  // ── Theme/unit breakdowns ──
-  ['T1','T2','T3'].forEach((theme, ti) => {
-    const units = [1,2,3,4,5,6,7,8,9].filter(u => THEME_MAP[u]===theme);
-    const thTotal    = units.reduce((s,u)=>s+stats.byUnit[u].total,0);
-    const thMastered = units.reduce((s,u)=>s+stats.byUnit[u].mastered,0);
-    const thInProg   = units.reduce((s,u)=>s+stats.byUnit[u].inProgress,0);
-    const thPct = thTotal ? Math.round(thMastered/thTotal*100) : 0;
+    const badges = t.units.map(u => {
+      const state = unitBadgeState(u, prog, activeTiers);
+      if(state==='none') return '';
+      return `<span class="unit-badge ${state}">U${u}</span>`;
+    }).join('');
 
-    let body = '';
-    units.forEach((u, ui) => {
-      const d = stats.byUnit[u];
-      if(ui > 0) body += `<div class="prog-divider"></div>`;
-      body += `<div class="prog-row">
-        <div class="prog-row-top">
-          <span class="prog-row-label">${UNIT_LABELS[u]}</span>
-          <span class="prog-row-nums">${d.mastered}/${d.total}</span>
+    html += `
+    <div class="prog-theme-card" style="border-left:3px solid ${t.colour};background:${t.colourAlpha}">
+      <div class="prog-theme-header">
+        <span class="prog-theme-name" style="color:${t.colour}">${t.label}</span>
+        ${isWeak ? '<span class="prog-focus-badge">Focus here</span>' : ''}
+      </div>
+      <div class="prog-badge-map">${badges}</div>
+      <div class="prog-bar-wrap" style="height:6px;margin:6px 0 4px">
+        <div style="height:100%;display:flex;border-radius:10px;overflow:hidden">
+          <div style="width:${pct_bar_m}%;background:${t.colour};transition:width 0.6s ease"></div>
+          <div style="width:${pct_bar_ip}%;background:${t.colour}80;transition:width 0.6s ease"></div>
         </div>
-        ${makePBar(d.mastered, d.inProgress, d.total, '5px')}
-        <div style="display:flex;gap:12px;margin-top:2px">
-          <span style="font-size:0.68rem;color:var(--text3)">F: ${d.F.mastered}/${d.F.total}</span>
-          <span style="font-size:0.68rem;color:var(--text3)">H: ${d.H.mastered}/${d.H.total}</span>
-          ${d.inProgress>0?`<span style="font-size:0.68rem;color:var(--gold)">${d.inProgress} in progress</span>`:''}
-        </div>
-      </div>`;
-    });
-
-    const headerHTML = `${THEME_LABELS[theme]} <span style="font-size:0.72rem;color:var(--text2);font-weight:400;margin-left:6px">${thMastered}/${thTotal} · ${thPct}%</span>`;
-    html += makeCollapsible('theme-'+theme, headerHTML, body, false);
+      </div>
+      <div class="prog-theme-stats">${t.pct}% locked in${toGo > 0 ? ' · ' + toGo + ' word' + (toGo!==1?'s':'') + ' to go' : ' · Complete!'}</div>
+      <button class="prog-study-btn" style="border-color:${t.colour};color:${t.colour}" onclick="studyTheme([${t.units.join(',')}])">Study ${t.label.split('·')[0].trim()}→</button>
+    </div>`;
   });
 
-container.innerHTML = html;
-const calDiv = document.createElement('div');
-calDiv.className = 'weekly-cal';
-calDiv.id = 'weeklyCalProgress';
-container.insertBefore(calDiv, container.firstChild);
-updateWeeklyCalendar();
+  container.innerHTML = html;
+  const calDiv = document.createElement('div');
+  calDiv.className = 'weekly-cal';
+  calDiv.id = 'weeklyCalProgress';
+  container.appendChild(calDiv);
+  updateWeeklyCalendar();
 }
 
 function openProgressScreen(){

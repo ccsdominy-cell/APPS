@@ -3400,7 +3400,6 @@ function makeCollapsible(id, headerHTML, bodyHTML, startOpen=false){
     </div>
   </div>`;
 }
-const stats = computeProgressStats(pid);
 function toggleProgSection(id){
   const body = document.getElementById('prog-body-'+id);
   const tog  = document.getElementById('prog-toggle-'+id);

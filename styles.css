@@ -943,9 +943,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 /* 5. Card area: cap height so MCQ buttons stay on screen on small phones */
 .card-area {
   flex: 1;
-  max-height: 42dvh;  /* fallback via clamp below */
+  max-height: 30dvh;
 }
 /* dvh fallback for older browsers */
 @supports not (height: 1dvh) {
-  .card-area { max-height: 42vh; }
+  .card-area { max-height: 30vh; }
+}
+
+/* 6. Settings + progress panels: safe-area top offset + iOS scroll fix */
+.settings-panel,
+#progressPanel {
+  top: calc(60px + env(safe-area-inset-top, 0px)) !important;
+  -webkit-overflow-scrolling: touch;
 }

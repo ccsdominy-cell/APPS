@@ -2039,7 +2039,7 @@ function showNextCard(){
     document.getElementById('hardDot').style.display=isHard?'block':'none';
     document.getElementById('frontWord').textContent=isRev?v.faux_ami_trap:v.f;
     document.getElementById('frontHint').textContent='';
-    document.getElementById('studyDirBadge').textContent=isRev?'🇬🇧 English → 🇫🇷 French':'🇫🇷 French → 🇬🇧 English';
+    document.getElementById('studyDirBadge').style.display='none';
     document.getElementById('cardInner').classList.remove('flipped');
     // Build MCQ options
     buildMCQ(v,isRev);
@@ -2061,6 +2061,7 @@ function showNextCard(){
     }
     document.getElementById('backTag').textContent=tag;
     document.getElementById('studyDirBadge').textContent=isFrEn?'🇫🇷 French → 🇬🇧 English':'🇬🇧 English → 🇫🇷 French';
+    document.getElementById('studyDirBadge').style.display='';
     document.getElementById('cardInner').classList.remove('flipped');
     document.getElementById('answerArea').classList.add('hidden');
     if(isMCQMode) buildVocabMCQ(v, v.dir==='fr-en');
@@ -5870,12 +5871,8 @@ function startTodaysGoal(){
   const dp = getDailyProgress(currentProfile.id);
   const streak = dp.streak || 0;
   document.getElementById('studyModeBadge').textContent = '🎯 Today\'s Goal';
-  const streakBadge = document.getElementById('studyStreakBadge');
-  streakBadge.textContent = '🔥 ' + streak + ' day streak';
-  streakBadge.style.display = '';
-  const badge2 = document.getElementById('studyModeBadge2');
-  badge2.textContent = '🃏 Flashcard Challenge';
-  badge2.style.display = '';
+  document.getElementById('studyStreakBadge').style.display = 'none';
+  document.getElementById('studyModeBadge2').style.display = 'none';
   document.getElementById('timerWrap').classList.remove('show');
   document.getElementById('fauxDirToggle').style.display = 'none';
   isMCQMode = true;

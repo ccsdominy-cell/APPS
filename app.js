@@ -3477,7 +3477,7 @@ function buildProgressView(){
   </div>`;
 
   themeStats.forEach(t => {
-    const isWeak = weakest && t.key===weakest.key && t.pct < 80;
+    const isWeak = weakest && t.key===weakest.key && t.pct < 80 && stats.mastered > 0;
     const pct_bar_m  = t.thTotal ? (t.thMastered/t.thTotal*100).toFixed(1) : 0;
     const pct_bar_ip = t.thTotal ? (t.thInProg/t.thTotal*100).toFixed(1) : 0;
     const toGo = t.thTotal - t.thMastered;

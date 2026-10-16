@@ -795,7 +795,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
   font-family: 'Outfit', sans-serif;
   flex-shrink: 0;
 }
-.unit-badge.gray  { background: var(--surface2); color: var(--text3); }
+.unit-badge.gray  { background: var(--surface3); color: var(--text2); border: 1.5px solid rgba(240,246,252,0.18); }
 .unit-badge.amber { background: transparent; color: var(--gold); border: 2px solid var(--gold); }
 .unit-badge.green { background: transparent; color: var(--green); border: 2px solid var(--green); }
 .unit-badge.none  { display: none; }

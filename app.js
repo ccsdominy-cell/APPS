@@ -1718,9 +1718,7 @@ function openMenu(){
   showScreen('menuScreen');
   const av=document.getElementById('menuAvatar');
   av.onclick = () => {
-  const s=document.getElementById('settingsPanel');
   const p=document.getElementById('progressPanel');
-  if(s && s.style.display!=='none') toggleSettings();
   if(p && p.style.display!=='none') toggleProgress();
 };
   av.style.background=currentProfile.color+'22';
@@ -1735,8 +1733,6 @@ function openMenu(){
   updateSettingsSummary();
   updateDailyGoalUI();
   updateWeeklyCalendar();
-  // Always start collapsed
-  document.getElementById('settingsPanel').style.display='none';
   const sb=document.getElementById('menuSettingsBtn');
   if(sb) sb.style.color='';
   updateBackBtn();
@@ -1750,21 +1746,20 @@ function updateBackBtn(){
 }
 
 function toggleSettings(){
-  const panel=document.getElementById('settingsPanel');
-  const btn=document.getElementById('menuSettingsBtn');
-  const modes=document.getElementById('studyModeSection');
-  const open=panel.style.display==='none';
-  panel.style.display=open?'block':'none';
-  if(modes) modes.style.display=open?'none':'';
-  if(btn) btn.style.color=open?'var(--gold)':'';
+  openSettingsScreen();
+}
+function openSettingsScreen(){
+  buildFilterChips();
+  showScreen('settingsScreen');
+  document.getElementById('settingsBack').onclick = () => openMenu();
+  if(document.getElementById('menuSettingsBtn'))
+    document.getElementById('menuSettingsBtn').style.color='';
 }
 
 function toggleProgress(){
   const panel=document.getElementById('progressPanel');
   const btn=document.getElementById('menuProgressBtn');
-  const settings=document.getElementById('settingsPanel');
   const open=panel.style.display==='none';
-  if(open && settings.style.display!=='none') toggleSettings();
   if(open) buildProgressView();
   panel.style.display=open?'block':'none';
   if(btn) btn.style.color=open?'var(--gold)':'';
@@ -1942,9 +1937,8 @@ document.getElementById('resetConfirmBtn').onclick=()=>{
   updateMenuStats();
   document.getElementById('resetConfirm').classList.add('hidden');
   document.getElementById('resetProgress').style.display='';
-  // Close settings panel after reset
-  document.getElementById('settingsPanel').style.display='none';
-  const sb=document.getElementById('menuSettingsBtn'); if(sb) sb.style.color='';
+  // Return to menu after reset
+  openMenu();
   showToast('Progress reset for '+currentProfile.name);
 };
 

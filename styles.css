@@ -950,8 +950,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
   .card-area { max-height: 30vh; }
 }
 
-/* 6. Settings + progress panels: safe-area top offset + iOS scroll fix */
-.settings-panel,
+/* 6. Progress panel: safe-area top offset + iOS scroll fix */
 #progressPanel {
   top: calc(60px + env(safe-area-inset-top, 0px)) !important;
   -webkit-overflow-scrolling: touch;

@@ -97,41 +97,7 @@
       </div>
     </div>
    
-    <!-- Settings panel (opened via ⚙️ in top bar) -->
- <div class="settings-panel" id="settingsPanel" style="display:none;position:fixed;top:60px;left:0;right:0;bottom:0;overflow-y:auto;z-index:10">
-  <div class="panel-header">
-    <button class="panel-close-x" onclick="toggleSettings()">✕ Close</button>
-  </div>
-      <div class="settings-section-label">Select Language Direction</div>
-      <div class="settings-hint">Choose whether to study French→English, English→French, or both ways.</div>
-      <div id="dirChips"></div>
-      <div class="settings-section-label" style="margin-top:12px">Select Tier</div>
-      <div class="settings-hint">Foundation covers the core 1,010 words. Higher adds 393 more challenging words.</div>
-      <div class="filter-row" id="tierChips"></div>
-      <div class="settings-section-label" style="margin-top:12px">Select Units</div>
-      <div class="settings-hint">Tap to select the units you want to study. Tap again to deselect.</div>
-      <div class="filter-card" style="margin-bottom:6px">
-        <div class="filter-card-title">Theme 1 — People &amp; Lifestyle</div>
-        <div class="filter-row" id="t1chips"></div>
-      </div>
-      <div class="filter-card" style="margin-bottom:6px">
-        <div class="filter-card-title">Theme 2 — Popular Culture</div>
-        <div class="filter-row" id="t2chips"></div>
-      </div>
-      <div class="filter-card">
-        <div class="filter-card-title">Theme 3 — Communication &amp; the World</div>
-        <div class="filter-row" id="t3chips"></div>
-      </div>
-      <div class="settings-reset-row">
-        <button class="settings-reset-btn" id="resetProgress">⚠️ Reset my progress</button>
-      </div>
-      <div class="settings-reset-confirm hidden" id="resetConfirm">
-        <div class="settings-reset-warning">This will permanently delete all progress for <strong id="resetProfileName"></strong>. This cannot be undone.</div>
-        <div class="settings-reset-btns">
-          <button class="btn settings-reset-confirm-btn" id="resetConfirmBtn">Yes, reset everything</button>
-        </div>
-      </div>
-    </div>
+    <!-- Settings panel removed — settings is now a full screen (#settingsScreen below) -->
 <div id="progressPanel" style="display:none;position:fixed;top:60px;left:0;right:0;bottom:0;overflow-y:auto;z-index:10;padding:1rem;background:var(--bg)">
   <div class="panel-header">
     <button class="panel-close-x" onclick="toggleProgress()">✕ Close</button>
@@ -385,6 +351,48 @@
     <!-- List panel -->
     <div id="exprListPanel" style="display:none">
       <div id="exprListBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS SCREEN -->
+<div class="screen hidden" id="settingsScreen">
+  <div class="top-bar">
+    <button class="back-btn" id="settingsBack">←</button>
+    <div class="user-info">
+      <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2)">⚙️ Settings</span>
+    </div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="prog-screen-body" id="settingsScreenBody" tabindex="0">
+    <div class="settings-section-label">Select Language Direction</div>
+    <div class="settings-hint">Choose whether to study French→English, English→French, or both ways.</div>
+    <div id="dirChips"></div>
+    <div class="settings-section-label" style="margin-top:12px">Select Tier</div>
+    <div class="settings-hint">Foundation covers the core 1,010 words. Higher adds 393 more challenging words.</div>
+    <div class="filter-row" id="tierChips"></div>
+    <div class="settings-section-label" style="margin-top:12px">Select Units</div>
+    <div class="settings-hint">Tap to select the units you want to study. Tap again to deselect.</div>
+    <div class="filter-card" style="margin-bottom:6px">
+      <div class="filter-card-title">Theme 1 — People &amp; Lifestyle</div>
+      <div class="filter-row" id="t1chips"></div>
+    </div>
+    <div class="filter-card" style="margin-bottom:6px">
+      <div class="filter-card-title">Theme 2 — Popular Culture</div>
+      <div class="filter-row" id="t2chips"></div>
+    </div>
+    <div class="filter-card">
+      <div class="filter-card-title">Theme 3 — Communication &amp; the World</div>
+      <div class="filter-row" id="t3chips"></div>
+    </div>
+    <div class="settings-reset-row">
+      <button class="settings-reset-btn" id="resetProgress">⚠️ Reset my progress</button>
+    </div>
+    <div class="settings-reset-confirm hidden" id="resetConfirm">
+      <div class="settings-reset-warning">This will permanently delete all progress for <strong id="resetProfileName"></strong>. This cannot be undone.</div>
+      <div class="settings-reset-btns">
+        <button class="btn settings-reset-confirm-btn" id="resetConfirmBtn">Yes, reset everything</button>
+      </div>
     </div>
   </div>
 </div>

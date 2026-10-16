@@ -1639,14 +1639,11 @@ function renderProfiles(){
     const prog = getProgress(p.id);
     const seen = new Set();
     const words = VOCAB.filter(v=>{ if(seen.has(v.f)) return false; seen.add(v.f); return true; });
-    const mastered = words.filter(v=>isWordMastered(prog,v.f)).length;
-    const inProgress = words.filter(v=>!isWordMastered(prog,v.f)&&isWordInProgress(prog,v.f)).length;
     const div = document.createElement('div');
     div.className='profile-btn';
     div.style.animationDelay=i*0.05+'s';
     div.innerHTML=`<div class="avatar" style="background:${p.color}22;color:${p.color}">${p.name[0].toUpperCase()}</div>
       <div class="pname">${p.name}</div>
-      <div class="pstats">${mastered} mastered · ${inProgress} in progress</div>
       <button class="pdel" title="Delete" onclick="deleteProfile(event,${i})">✕</button>`;
     div.onclick=(e)=>{if(!e.target.classList.contains('pdel'))selectProfile(i);};
     grid.appendChild(div);

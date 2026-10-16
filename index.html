@@ -24,11 +24,11 @@
 <div class="screen" id="profileScreen" tabindex="0">
   <div class="logo" id="langLogo">
     <h1 id="logoH1">French <span>GCSE</span></h1>
-    <p id="logoSub">AQA 8652 · 2026 Exams</p>
+    <p id="logoSub">AQA 8652 · 2027 Exams</p>
   </div>
   <div style="display:flex;gap:8px;margin-bottom:18px;background:var(--surface);border-radius:40px;padding:4px;border:1px solid var(--border);width:100%;max-width:380px">
-    <button id="langFR" onclick="switchLang('fr')" style="flex:1;padding:8px 16px;border-radius:36px;border:none;font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.2s;background:var(--accent);color:#000">🇫🇷 French</button>
-    <button id="langES" onclick="switchLang('es')" style="flex:1;padding:8px 16px;border-radius:36px;border:none;font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.2s;background:transparent;color:var(--text2)">🇪🇸 Spanish</button>
+    <button id="langFR" onclick="switchLang('fr')" style="flex:1;padding:8px 16px;border-radius:36px;border:none;font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.2s;background:var(--accent);color:#000">FRENCH</button>
+    <button id="langES" onclick="switchLang('es')" style="flex:1;padding:8px 16px;border-radius:36px;border:none;font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.2s;background:transparent;color:var(--text2)">SPANISH</button>
   </div>
   <div class="profiles-label">Who's studying?</div>
   <div class="profiles-grid" id="profilesGrid"></div>
@@ -2082,7 +2082,7 @@ window.switchLang=function(lang){
   if(eb){eb.style.background=es?'var(--accent)':'transparent';eb.style.color=es?'#000':'var(--text2)';}
   var h1=document.getElementById('logoH1'),sb=document.getElementById('logoSub');
   if(h1)h1.innerHTML=es?'Spanish <span>GCSE</span>':'French <span>GCSE</span>';
-  if(sb)sb.textContent=es?'AQA 8692 · 2026 Exams':'AQA 8652 · 2026 Exams';
+  if(sb)sb.textContent=es?'AQA 8692 · 2027 Exams':'AQA 8652 · 2027 Exams';
   var fl=document.getElementById('menuLangFlag');
   if(fl)fl.textContent=es?'🇪🇸':'🇫🇷';
   var dd=document.querySelector('#modeDrill .mode-desc');

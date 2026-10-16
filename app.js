@@ -1549,7 +1549,7 @@ const UNIT_NAMES = {
 let profiles = [], currentProfile = null;
 let activeUnits = [1,2,3,4,5,6,7,8,9];
 let activeTiers = ["F","H"];
-let activeDirection = "fr-en"; // "fr-en" | "en-fr" | "both"
+let activeDirection = "both"; // "fr-en" | "en-fr" | "both"
 let currentMode = "normal";
 let deck = [], queue = [], sessionCorrect = 0, sessionWrong = 0;
 let isFlipped = false, timerInterval = null, timerLeft = 10;
@@ -1785,6 +1785,23 @@ function buildFilterChips(){
   const t2=document.getElementById('t2chips');
   const t3=document.getElementById('t3chips');
   t1.innerHTML=t2.innerHTML=t3.innerHTML='';
+  // Theme-level "All" chips
+  [{container:t1,units:[1,2,3]},{container:t2,units:[4,5,6]},{container:t3,units:[7,8,9]}].forEach(({container,units})=>{
+    const allOn=units.every(u=>activeUnits.includes(u));
+    const c=document.createElement('button');
+    c.className='chip chip-theme-all'+(allOn?' active':'');
+    c.textContent='All';
+    c.onclick=()=>{
+      if(units.every(u=>activeUnits.includes(u))){
+        const remaining=activeUnits.filter(u=>!units.includes(u));
+        if(remaining.length>0) activeUnits=remaining;
+      } else {
+        units.forEach(u=>{if(!activeUnits.includes(u)) activeUnits.push(u);});
+      }
+      saveProfilePrefs();updateMenuStats();buildFilterChips();
+    };
+    container.appendChild(c);
+  });
   for(let u=1;u<=9;u++){
     const label=`U${u}`;
     const c=document.createElement('button');
@@ -1802,6 +1819,11 @@ function buildFilterChips(){
   dc.innerHTML = '';
   const dirs = [
     {
+      id:'both',
+      label:'🔀  Both ways',
+      sub:'Mixes recognition and production. Best all-round preparation.'
+    },
+    {
       id:'fr-en',
       label:'🇫🇷 French → 🇬🇧 English',
       sub:'Recognition — reading & listening skill. Easier, but essential.'
@@ -1810,11 +1832,6 @@ function buildFilterChips(){
       id:'en-fr',
       label:'🇬🇧 English → 🇫🇷 French',
       sub:'Production — writing & speaking skill. Harder, where most marks are lost.'
-    },
-    {
-      id:'both',
-      label:'🔀  Both ways',
-      sub:'Mixes recognition and production. Best all-round preparation.'
     }
   ];
   dirs.forEach(d => {
@@ -1919,10 +1936,6 @@ document.getElementById('resetProgress').onclick=()=>{
   document.getElementById('resetProfileName').textContent=currentProfile.name;
   document.getElementById('resetConfirm').classList.remove('hidden');
   document.getElementById('resetProgress').style.display='none';
-};
-document.getElementById('resetCancel').onclick=()=>{
-  document.getElementById('resetConfirm').classList.add('hidden');
-  document.getElementById('resetProgress').style.display='';
 };
 document.getElementById('resetConfirmBtn').onclick=()=>{
   saveProgress(currentProfile.id,{});
@@ -2204,31 +2217,31 @@ function buildMCQ(v, isRev){
     // Forward: show French → pick correct English meaning
     correctAnswer = v.e;
     trapAnswer    = v.faux_ami_trap;
-    // 2 random distractors: correct English meanings from other faux amis
+    // 1 random distractor: correct English meaning from another faux ami
     const pool = allFaux.map(x=>x.e).filter(x=>x!==correctAnswer&&x!==trapAnswer);
-    distractors = shuffleArr(pool).slice(0,2);
+    distractors = shuffleArr(pool).slice(0,1);
   } else {
     // Reverse: show English trap → pick correct French word
     correctAnswer = v.f;
     trapAnswer    = v.faux_ami_trap; // shown as a decoy English look-alike
-    // 2 random distractors: French words from other faux amis
+    // 1 random distractor: French word from another faux ami
     const pool = allFaux.map(x=>x.f).filter(x=>x!==correctAnswer);
-    distractors = shuffleArr(pool).slice(0,2);
+    distractors = shuffleArr(pool).slice(0,1);
     // In reverse, trap is the English word that looks like French — we show it as a wrong French option
     // Replace trapAnswer with a plausible French decoy (the trap word itself looks French)
     // Use the trap string as one of the wrong options
   }
 
-  // Build 4 options: correct + trap + 2 distractors, shuffled
+  // Build 3 options: correct + trap + 1 distractor, shuffled
   const options = shuffleArr([
     {text: correctAnswer, isCorrect: true},
     {text: trapAnswer,    isCorrect: false, isTrap: true},
     {text: distractors[0]||'—', isCorrect: false},
-    {text: distractors[1]||'—', isCorrect: false},
   ]);
 
-  // Populate buttons
-  const btns = [0,1,2,3].map(i=>document.getElementById('mcqBtn'+i));
+  // Populate buttons (3 options)
+  document.getElementById('mcqBtn3').style.display='none';
+  const btns = [0,1,2].map(i=>document.getElementById('mcqBtn'+i));
   btns.forEach((btn,i)=>{
     btn.textContent = options[i].text;
     btn.className = 'mcq-btn';
@@ -2252,7 +2265,7 @@ function fauxRevealAnswer(chosen){
   const correct = chosen && chosen.isCorrect;
 
   // Style all buttons
-  const btns = [0,1,2,3].map(i=>document.getElementById('mcqBtn'+i));
+  const btns = [0,1,2].map(i=>document.getElementById('mcqBtn'+i));
   btns.forEach(btn=>{
     btn.disabled = true;
     if(btn.textContent === (isRev ? v.f : v.e)){
@@ -2298,16 +2311,16 @@ function buildVocabMCQ(v, isFrEn){
   const correctAnswer = isFrEn ? v.e : v.f;
   const distractors   = [...new Set(
     shuffleArr(pool).map(x => isFrEn ? x.e : x.f).filter(t => t !== correctAnswer)
-  )].slice(0, 3);
+  )].slice(0, 2);
 
   const options = shuffleArr([
     {text: correctAnswer,       isCorrect: true},
     {text: distractors[0]||'—', isCorrect: false},
     {text: distractors[1]||'—', isCorrect: false},
-    {text: distractors[2]||'—', isCorrect: false},
   ]);
 
-  const btns = [0,1,2,3].map(i => document.getElementById('mcqBtn'+i));
+  document.getElementById('mcqBtn3').style.display='none';
+  const btns = [0,1,2].map(i => document.getElementById('mcqBtn'+i));
   btns.forEach((btn, i) => {
     btn.textContent = options[i].text;
     btn.className   = 'mcq-btn';
@@ -2330,7 +2343,7 @@ function vocabRevealAnswer(chosen, v, isFrEn){
   // Flip the card to reveal the answer
   document.getElementById('cardInner').classList.add('flipped');
 
-  const btns = [0,1,2,3].map(i => document.getElementById('mcqBtn'+i));
+  const btns = [0,1,2].map(i => document.getElementById('mcqBtn'+i));
   btns.forEach(btn => {
     btn.disabled = true;
     if(btn.textContent === correctText) btn.className = 'mcq-btn reveal';

@@ -895,3 +895,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 /* Center bar stats and totals */
 .prog-bar-breakdown { justify-content: center; }
 .prog-theme-totals  { text-align: center; }
+
+/* v29 — desktop scroll + theme-all chip */
+#studyScreen { overflow-y: auto; }
+.chip-theme-all { font-weight: 700; margin-right: 4px; }

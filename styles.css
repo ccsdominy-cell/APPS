@@ -687,27 +687,29 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 .admin-fb-btn.resolve:hover{background:rgba(63,185,80,0.1)}
 .admin-empty{text-align:center;padding:32px;color:var(--text3);font-size:0.85rem}
 
-/* Navigation panel Done button */
-.panel-done-row {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0.5rem 0 1rem;
+/* Navigation panel close button */
+.panel-header {
   position: sticky;
   top: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 8px 0;
   background: var(--bg);
-  z-index: 1;
+  z-index: 2;
 }
-.panel-done-btn {
-  background: var(--accent);
-  color: #fff;
-  border: none;
+.panel-close-x {
+  background: none;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 0.4rem 1rem;
-  font-size: 0.9rem;
-  font-weight: 600;
+  color: var(--text2);
+  font-size: 0.8rem;
+  padding: 4px 10px;
   cursor: pointer;
+  font-family: inherit;
+}
+.panel-close-x:hover {
+  background: var(--surface2);
 }
 #menuBack {
   font-size: 0.8rem;
-  min-width: 60px;
 }

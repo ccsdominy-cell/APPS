@@ -1748,16 +1748,8 @@ function openMenu(){
 function updateBackBtn(){
   const btn = document.getElementById('menuBack');
   if(!btn) return;
-  // Priority 1: active study session
-  const studyScreen = document.getElementById('studyScreen');
-  if(studyScreen && studyScreen.style.display !== 'none'){
-    btn.textContent = '← Back';
-    return;
-  }
-  // Priority 2: panel open
-  const settingsOpen = document.getElementById('settingsPanel').style.display !== 'none';
-  const progressOpen = document.getElementById('progressPanel').style.display !== 'none';
-  btn.textContent = (settingsOpen || progressOpen) ? '← Close' : 'Profiles';
+  const studyActive = document.getElementById('studyScreen')?.style.display !== 'none';
+  btn.textContent = studyActive ? '✕ Close' : 'Profiles';
 }
 
 function toggleSettings(){
@@ -1768,7 +1760,6 @@ function toggleSettings(){
   panel.style.display=open?'block':'none';
   if(modes) modes.style.display=open?'none':'';
   if(btn) btn.style.color=open?'var(--gold)':'';
-  updateBackBtn();
 }
 
 function toggleProgress(){
@@ -1780,7 +1771,6 @@ function toggleProgress(){
   if(open) buildProgressView();
   panel.style.display=open?'block':'none';
   if(btn) btn.style.color=open?'var(--gold)':'';
-  updateBackBtn();
 }
 
 function updateSettingsSummary(){
@@ -1914,15 +1904,8 @@ function updateMenuStats(){
   }
 }
 document.getElementById('menuBack').onclick = () => {
-  const studyScreen = document.getElementById('studyScreen');
-  if(studyScreen && studyScreen.style.display !== 'none'){
-    openMenu();
-    return;
-  }
-  const settingsOpen = document.getElementById('settingsPanel').style.display !== 'none';
-  const progressOpen = document.getElementById('progressPanel').style.display !== 'none';
-  if(settingsOpen){ toggleSettings(); return; }
-  if(progressOpen){ toggleProgress(); return; }
+  const studyActive = document.getElementById('studyScreen')?.style.display !== 'none';
+  if(studyActive){ openMenu(); return; }
   showScreen('profileScreen');
 };
 

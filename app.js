@@ -3432,33 +3432,37 @@ function studyTheme(units){
 
 function buildProgressView(){
   const pid = currentProfile.id;
-  const prog = getProgress(pid);
   const stats = computeProgressStats(pid); // uses activeTiers
   const container = document.getElementById('progScreenBody');
 
   const themeConfig = [
-    {key:'T1', label:'Theme 1 · People & Lifestyle', units:[1,2,3], colour:'#58a6ff', colourAlpha:'#58a6ff18'},
-    {key:'T2', label:'Theme 2 · Popular Culture',    units:[4,5,6], colour:'#3fb950', colourAlpha:'#3fb95018'},
-    {key:'T3', label:'Theme 3 · Communication',      units:[7,8,9], colour:'#bc8cff', colourAlpha:'#bc8cff18'},
+    {key:'T1', label:'Theme 1 · People & Lifestyle', units:[1,2,3], colour:'#58a6ff', colourAlpha:'#58a6ff15'},
+    {key:'T2', label:'Theme 2 · Popular Culture',    units:[4,5,6], colour:'#3fb950', colourAlpha:'#3fb95015'},
+    {key:'T3', label:'Theme 3 · Communication',      units:[7,8,9], colour:'#bc8cff', colourAlpha:'#bc8cff15'},
   ];
 
   const themeStats = themeConfig.map(t => {
     const thTotal    = t.units.reduce((s,u)=>s+stats.byUnit[u].total,0);
     const thMastered = t.units.reduce((s,u)=>s+stats.byUnit[u].mastered,0);
     const thInProg   = t.units.reduce((s,u)=>s+stats.byUnit[u].inProgress,0);
+    const thToDo     = thTotal - thMastered - thInProg;
     const pct = thTotal ? Math.round(thMastered/thTotal*100) : 0;
-    return {...t, thTotal, thMastered, thInProg, pct};
+    return {...t, thTotal, thMastered, thInProg, thToDo, pct};
   });
-
-  // Weakest theme = lowest mastered%, only among themes that have words
-  const withWords = themeStats.filter(t=>t.thTotal>0);
-  const weakest = withWords.length ? withWords.reduce((a,b)=>a.pct<=b.pct?a:b) : null;
 
   const tierCtx = activeTiers.length===2 ? 'All tiers' : activeTiers.includes('F') ? 'Foundation tier' : 'Higher tier';
   const pct_m  = stats.total ? Math.round(stats.mastered/stats.total*100) : 0;
   const pct_ip = stats.total ? Math.round(stats.inProgress/stats.total*100) : 0;
 
+  // ── Streak at top ──
   let html = `
+  <div class="prog-streak-section">
+    <div class="prog-streak-label">DAILY STREAK</div>
+    <div class="weekly-cal" id="weeklyCalProgress"></div>
+  </div>`;
+
+  // ── Headline ──
+  html += `
   <div class="prog-headline">
     <div class="prog-headline-num">${stats.mastered}</div>
     <div class="prog-headline-label">words locked in</div>
@@ -3476,41 +3480,32 @@ function buildProgressView(){
     </div>
   </div>`;
 
+  // ── Theme cards ──
   themeStats.forEach(t => {
-    const isWeak = weakest && t.key===weakest.key && t.pct < 80 && stats.mastered > 0;
-    const pct_bar_m  = t.thTotal ? (t.thMastered/t.thTotal*100).toFixed(1) : 0;
-    const pct_bar_ip = t.thTotal ? (t.thInProg/t.thTotal*100).toFixed(1) : 0;
-    const toGo = t.thTotal - t.thMastered;
-
-    const badges = t.units.map(u => {
-      const state = unitBadgeState(u, prog, activeTiers);
-      if(state==='none') return '';
-      return `<span class="unit-badge ${state}">U${u}</span>`;
-    }).join('');
+    const pct_m2  = t.thTotal ? (t.thMastered/t.thTotal*100).toFixed(1) : 0;
+    const pct_ip2 = t.thTotal ? (t.thInProg/t.thTotal*100).toFixed(1) : 0;
 
     html += `
     <div class="prog-theme-card" style="border-left:3px solid ${t.colour};background:${t.colourAlpha}">
       <div class="prog-theme-header">
         <span class="prog-theme-name" style="color:${t.colour}">${t.label}</span>
-        ${isWeak ? '<span class="prog-focus-badge">Focus here</span>' : ''}
+        <button class="prog-study-link" style="color:${t.colour}" onclick="studyTheme([${t.units.join(',')}])">Study →</button>
       </div>
-      <div class="prog-badge-map">${badges}</div>
-      <div class="prog-bar-wrap" style="height:6px;margin:6px 0 4px">
-        <div style="height:100%;display:flex;border-radius:10px;overflow:hidden">
-          <div style="width:${pct_bar_m}%;background:${t.colour};transition:width 0.6s ease"></div>
-          <div style="width:${pct_bar_ip}%;background:${t.colour}80;transition:width 0.6s ease"></div>
-        </div>
+      <div class="prog-theme-bar">
+        <div style="width:${pct_m2}%;background:var(--green);transition:width 0.6s ease"></div>
+        <div style="width:${pct_ip2}%;background:var(--gold);transition:width 0.6s ease"></div>
+        <div style="flex:1;background:var(--surface3)"></div>
       </div>
-      <div class="prog-theme-stats">${t.pct}% locked in${toGo > 0 ? ' · ' + toGo + ' word' + (toGo!==1?'s':'') + ' to go' : ' · Complete!'}</div>
-      <button class="prog-study-btn" style="border-color:${t.colour};color:${t.colour}" onclick="studyTheme([${t.units.join(',')}])">Study ${t.label.split('·')[0].trim()}→</button>
+      <div class="prog-bar-breakdown">
+        <span style="color:var(--green)">✓ ${t.thMastered} locked in</span>
+        <span style="color:var(--gold)">◑ ${t.thInProg} learning</span>
+        <span style="color:var(--text3)">○ ${t.thToDo} to do</span>
+      </div>
+      <div class="prog-theme-totals">${t.thMastered} / ${t.thTotal} words · ${t.pct}%</div>
     </div>`;
   });
 
   container.innerHTML = html;
-  const calDiv = document.createElement('div');
-  calDiv.className = 'weekly-cal';
-  calDiv.id = 'weeklyCalProgress';
-  container.appendChild(calDiv);
   updateWeeklyCalendar();
 }
 

@@ -819,3 +819,50 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 .prog-study-btn:hover {
   background: rgba(255,255,255,0.06);
 }
+
+/* ── Progress v3 refinements ── */
+.prog-streak-section {
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.prog-streak-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+.prog-theme-bar {
+  height: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  margin: 10px 0 6px;
+}
+.prog-bar-breakdown {
+  display: flex;
+  gap: 12px;
+  font-size: 0.72rem;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.prog-theme-totals {
+  font-size: 0.75rem;
+  color: var(--text2);
+  margin-top: 2px;
+}
+.prog-study-link {
+  background: none;
+  border: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.75;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.prog-study-link:hover { opacity: 1; }

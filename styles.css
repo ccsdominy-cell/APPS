@@ -899,3 +899,53 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 /* v29 — desktop scroll + theme-all chip */
 #studyScreen { overflow-y: auto; }
 .chip-theme-all { font-weight: 700; margin-right: 4px; }
+
+/* v32 — mobile fixes
+   ─────────────────────────────────────────────────────────── */
+
+/* 1. Touch targets: back/nav/settings icons → 44px tap area */
+.top-bar .back-btn {
+  padding: 10px 8px;
+  min-width: 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+.study-top .back-btn {
+  padding: 10px;
+  min-width: 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+/* 2. Profile delete: visible on touch devices (no hover available) */
+@media (hover: none) {
+  .profile-btn .pdel { opacity: 0.6; }
+}
+
+/* 3. Feedback FAB: respect iPhone home-indicator safe area */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .feedback-fab {
+    bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+}
+
+/* 4. Progress "Study →" link: larger tap target */
+.prog-study-link {
+  padding: 10px 0 10px 16px;
+}
+
+/* 5. Card area: cap height so MCQ buttons stay on screen on small phones */
+.card-area {
+  flex: 1;
+  max-height: 42dvh;  /* fallback via clamp below */
+}
+/* dvh fallback for older browsers */
+@supports not (height: 1dvh) {
+  .card-area { max-height: 42vh; }
+}

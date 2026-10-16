@@ -1,4 +1,4 @@
-const CACHE = 'french-gcse-v36';
+const CACHE = 'french-gcse-v37';
 
 const FILES = [
   './',
@@ -53,9 +53,13 @@ self.addEventListener('fetch', event => {
             caches.open(CACHE).then(cache => cache.put(event.request, clone));
           }
           return response;
-        }).catch(() => {
-          // If offline and not cached, return the app shell for navigation requests
-          if (event.request.mode === 'navigate') return caches.match('./index.html');
+        }).catch(async () => {
+          // If offline and not cached: return app shell for navigation, 503 for everything else
+          if (event.request.mode === 'navigate') {
+            const shell = await caches.match('./index.html');
+            return shell || new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+          }
+          return new Response('Network error', { status: 503, statusText: 'Service Unavailable' });
         });
       })
     );

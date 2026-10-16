@@ -950,7 +950,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
   .card-area { max-height: 30vh; }
 }
 
-/* 6. Progress panel: safe-area top offset + iOS scroll fix */
+/* 6. Study top-bar: remove all mode/direction badges */
+#studyModeBadge, #studyStreakBadge, #studyModeBadge2, #studyDirBadge {
+  display: none !important;
+}
+
+/* 7. Progress panel: safe-area top offset + iOS scroll fix */
 #progressPanel {
   top: calc(60px + env(safe-area-inset-top, 0px)) !important;
   -webkit-overflow-scrolling: touch;

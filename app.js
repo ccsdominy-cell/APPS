@@ -1748,8 +1748,8 @@ function openMenu(){
 function updateBackBtn(){
   const btn = document.getElementById('menuBack');
   if(!btn) return;
-  const studyActive = document.getElementById('studyScreen')?.style.display !== 'none';
-  btn.textContent = studyActive ? '✕ Close' : 'Profiles';
+  const studyActive = !document.getElementById('studyScreen')?.classList.contains('hidden');
+  btn.textContent = studyActive ? '✕ Close' : 'PROFILES';
 }
 
 function toggleSettings(){
@@ -1904,7 +1904,7 @@ function updateMenuStats(){
   }
 }
 document.getElementById('menuBack').onclick = () => {
-  const studyActive = document.getElementById('studyScreen')?.style.display !== 'none';
+  const studyActive = !document.getElementById('studyScreen')?.classList.contains('hidden');
   if(studyActive){ openMenu(); return; }
   showScreen('profileScreen');
 };

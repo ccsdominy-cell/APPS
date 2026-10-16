@@ -200,7 +200,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 .study-top .queue-info{font-size:0.78rem;color:var(--text2)}
 
 .prog-wrap{padding:0 18px 8px;flex-shrink:0;position:relative;z-index:5}
-.prog-bar{height:12px;background:var(--surface2);border-radius:8px;overflow:hidden;display:flex}
+.prog-bar{height:12px;background:transparent;border-radius:8px;overflow:hidden;display:flex}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green));border-radius:8px 0 0 8px;transition:width 0.4s ease;flex-shrink:0}
 .prog-fill-wrong{height:100%;background:var(--red);transition:width 0.4s ease;flex-shrink:0}
 .prog-text{font-size:0.85rem;font-weight:600;color:var(--text2);margin-top:6px;text-align:center;letter-spacing:0.02em}

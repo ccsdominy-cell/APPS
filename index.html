@@ -226,11 +226,12 @@
 <div class="screen hidden" id="studyScreen">
   <div class="study-top">
     <button class="back-btn" id="studyBack" style="position:fixed;top:14px;left:18px;z-index:500;background:var(--bg);border:none;color:var(--text2);cursor:pointer;font-size:1.3rem;padding:8px;border-radius:8px">←</button>
-    <div style="display:flex;gap:8px;align-items:center;margin-left:40px">
-      <div class="mode-badge" id="studyModeBadge">Flashcards</div>
-      <div class="mode-badge" id="studyStreakBadge" style="display:none"></div>
-      <div class="mode-badge" id="studyModeBadge2" style="display:none"></div>
-      <div class="mode-badge" id="studyDirBadge" style="font-size:0.85rem">🇫🇷 French → 🇬🇧 English</div>
+    <!-- Badge elements kept for JS compatibility but not rendered -->
+    <div style="display:none" aria-hidden="true">
+      <div id="studyModeBadge"></div>
+      <div id="studyStreakBadge"></div>
+      <div id="studyModeBadge2"></div>
+      <div id="studyDirBadge"></div>
     </div>
     <div class="queue-info" id="queueInfo"></div>
   </div>

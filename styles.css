@@ -866,3 +866,32 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
   flex-shrink: 0;
 }
 .prog-study-link:hover { opacity: 1; }
+
+/* ── Progress v3 polish — centering & mobile ── */
+.prog-streak-label { text-align: center; }
+
+.prog-headline-pct {
+  font-size: 0.78rem;
+  color: var(--text2);
+  margin-top: 3px;
+}
+
+/* Center theme name, pin Study → absolutely to the right */
+.prog-theme-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 28px;
+  margin-bottom: 10px;
+}
+.prog-study-link {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Center bar stats and totals */
+.prog-bar-breakdown { justify-content: center; }
+.prog-theme-totals  { text-align: center; }

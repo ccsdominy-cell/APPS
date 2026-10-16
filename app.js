@@ -3467,6 +3467,7 @@ function buildProgressView(){
     <div class="prog-headline-num">${stats.mastered}</div>
     <div class="prog-headline-label">words locked in</div>
     <div class="prog-headline-ctx">${tierCtx} · ${stats.total} words total</div>
+    <div class="prog-headline-pct">${pct_m}% of ${tierCtx.toLowerCase()} locked in</div>
     <div class="prog-bar-wrap" style="height:8px;margin-top:12px">
       <div style="height:100%;display:flex;border-radius:10px;overflow:hidden">
         <div style="width:${pct_m}%;background:var(--green);transition:width 0.6s ease"></div>

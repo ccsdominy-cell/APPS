@@ -3768,7 +3768,7 @@ function fbUpdateCount(){
 }
 
 // Submit
-const FEEDBACK_WEBHOOK = 'https://script.google.com/macros/s/AKfycbz91B5qXSd2P3xuImND5Yd2Zj5Ums3sF-6OaHQ8nTanVH9fGY95wPfQL_WugzuBQBl00w/exec';
+const FEEDBACK_WEBHOOK = 'https://script.google.com/macros/s/AKfycbwsRTINXtoTTOML0flgXN9wBnFSuF_FIh8Kv3xzyW2v4jBAOs6guqzLLksBmsEldzdk/exec';
 
 function submitFeedback(){
   const text = document.getElementById('fbText').value.trim();
@@ -3792,17 +3792,17 @@ function submitFeedback(){
   all.unshift(entry);
   saveFeedback(all);
   // Send to Google Sheets (fire and forget)
-  const params = new URLSearchParams({
-    timestamp,
-    user,
-    page,
-    category: cat,
-    feedback: text
-  });
   fetch(FEEDBACK_WEBHOOK, {
     method: 'POST',
     mode: 'no-cors',
-    body: params
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      language:  'French',
+      profile:   user,
+      screen:    page + (cat !== 'General' ? ' · ' + cat : ''),
+      message:   text,
+      userAgent: navigator.userAgent
+    })
   }).catch(function(){}); // Silent fail — local save is the backup
   closeFeedbackModal();
   showToast('Feedback submitted — thanks!');

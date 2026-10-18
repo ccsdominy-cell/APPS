@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mygcsehub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #f7f6f2;
+      --surface:  #ffffff;
+      --ink:      #1a1a1a;
+      --muted:    #666;
+      --border:   #e4e2db;
+      --shadow:   0 2px 12px rgba(0,0,0,.07);
+      --shadow-h: 0 6px 24px rgba(0,0,0,.13);
+      --radius:   16px;
+      --fr:       #0055a4;
+      --es:       #c60b1e;
+      --rs:       #4a3f8a;
+      --green:    #3fb950;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg:      #111110;
+        --surface: #1e1d1b;
+        --ink:     #f0ede6;
+        --muted:   #999;
+        --border:  #2e2d29;
+        --shadow:  0 2px 12px rgba(0,0,0,.4);
+        --shadow-h:0 6px 24px rgba(0,0,0,.55);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg:      #111110;
+      --surface: #1e1d1b;
+      --ink:     #f0ede6;
+      --muted:   #999;
+      --border:  #2e2d29;
+      --shadow:  0 2px 12px rgba(0,0,0,.4);
+      --shadow-h:0 6px 24px rgba(0,0,0,.55);
+    }
+
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+
+    .wordmark {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .wordmark span {
+      color: #3fb950;
+      font-weight: 700;
+    }
+
+    /* ─── PROFILE PICKER ─── */
+    .picker {
+      width: 100%;
+      max-width: 740px;
+      margin-bottom: 32px;
+    }
+
+    .picker-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .chip {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 40px;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .chip:hover {
+      border-color: var(--chip-color, var(--green));
+      color: var(--chip-color, var(--green));
+      transform: translateY(-1px);
+    }
+
+    .chip.active {
+      background: var(--chip-color, var(--green));
+      border-color: var(--chip-color, var(--green));
+      color: #fff;
+      box-shadow: 0 4px 14px color-mix(in srgb, var(--chip-color, var(--green)) 40%, transparent);
+    }
+
+    .chip-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      background: color-mix(in srgb, var(--chip-color, var(--green)) 20%, transparent);
+      color: var(--chip-color, var(--green));
+    }
+
+    .chip.active .chip-avatar {
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+    }
+
+    .chip-add {
+      border-style: dashed;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .chip-add:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    /* ─── ADD FORM ─── */
+    .add-form {
+      display: none;
+      margin-top: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      max-width: 360px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .add-form.visible { display: block; }
+
+    .add-form input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      background: var(--bg);
+      color: var(--ink);
+      outline: none;
+      margin-bottom: 14px;
+    }
+
+    .add-form input:focus { border-color: var(--green); }
+
+    .colors-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+      outline: none;
+    }
+
+    .color-swatch:hover { transform: scale(1.15); }
+    .color-swatch.selected { border-color: var(--ink); transform: scale(1.15); }
+
+    .form-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .form-row button {
+      flex: 1;
+      padding: 9px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--surface);
+      color: var(--muted);
+    }
+
+    .form-row button.primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .form-row button.primary:hover { filter: brightness(1.08); }
+    .form-row button:first-child:hover { border-color: var(--ink); color: var(--ink); }
+
+    /* ─── SUBJECT CARDS ─── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 740px;
+    }
+
+    .card {
+      background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 24px 24px;
+      text-decoration: none;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      box-shadow: var(--shadow);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--accent);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-h);
+      border-color: var(--accent);
+    }
+
+    .card[data-subject="fr"] { --accent: var(--fr); }
+    .card[data-subject="es"] { --accent: var(--es); }
+    .card[data-subject="rs"] { --accent: var(--rs); }
+
+    .card-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 700;
+      font-size: 1.45rem;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    .card-cta {
+      margin-top: auto;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-top: 10px;
+    }
+
+    .card:hover .card-cta { color: var(--accent); }
+
+    .card-cta svg {
+      width: 14px; height: 14px;
+      transition: transform .18s ease;
+    }
+
+    .card:hover .card-cta svg { transform: translateX(3px); }
+
+    footer {
+      margin-top: 56px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 660px) {
+      .grid { grid-template-columns: 1fr; }
+      header { margin-bottom: 32px; }
+      .picker { margin-bottom: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img class="logo-img" src="/APPS/icon.png" alt="mygcsehub logo" onerror="this.style.display='none'">
+    <div class="wordmark">my<span>gcse</span>hub</div>
+  </header>
+
+  <!-- PROFILE PICKER -->
+  <section class="picker">
+    <div class="picker-label">Who's revising today?</div>
+    <div class="chip-grid" id="chipGrid"></div>
+    <div class="add-form" id="addForm">
+      <input type="text" id="newName" placeholder="Your name" maxlength="16"
+        autocomplete="off" autocorrect="off" autocapitalize="words"
+        spellcheck="false" enterkeyhint="done">
+      <div class="colors-row" id="colorPicker"></div>
+      <div class="form-row">
+        <button onclick="cancelAdd()">Cancel</button>
+        <button class="primary" onclick="confirmAdd()">Save</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="grid">
+
+    <a class="card" href="/APPS/" data-subject="fr" id="cardFr">
+      <div class="card-title">French</div>
+      <div class="card-cta">
+        Start revision
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 8h10M9 4l4 4-4 4"/>
+        </svg>
+      </div>
+    </a>
+
+    <a class="card" href="/APPS/?lang=es" data-subject="es" id="cardEs">
+      <div class="card-title">Spanish</div>
+      <div class="card-cta">
+        Start revision
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 8h10M9 4l4 4-4 4"/>
+        </svg>
+      </div>
+    </a>
+
+    <a class="card" href="/GCSE-RS.html" data-subject="rs">
+      <div class="card-title">Religious Studies</div>
+      <div class="card-cta">
+        Start revision
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 8h10M9 4l4 4-4 4"/>
+        </svg>
+      </div>
+    </a>
+
+  </main>
+
+  <footer>
+    &copy; 2026 mygcsehub &nbsp;·&nbsp; Built for AQA GCSE · 2027 exams
+  </footer>
+
+  <script>
+    var PALETTE = ['#0055a4','#c60b1e','#3fb950','#f0a500','#7c3aed','#0891b2'];
+    var selectedColor = PALETTE[2]; // default green
+    var activeProfileId = null;
+
+    // ── Storage helpers ──────────────────────────────────────────────────────
+    function getProfiles() {
+      try {
+        var fr = JSON.parse(localStorage.getItem('fr_profiles') || '[]');
+        var es = JSON.parse(localStorage.getItem('es_profiles') || '[]');
+        var seen = {};
+        var merged = [];
+        fr.concat(es).forEach(function(p) {
+          if (p && p.id && !seen[p.id]) { seen[p.id] = true; merged.push(p); }
+        });
+        return merged;
+      } catch(e) { return []; }
+    }
+
+    function addProfileToStorage(p) {
+      try {
+        ['fr_profiles', 'es_profiles'].forEach(function(key) {
+          var arr = JSON.parse(localStorage.getItem(key) || '[]');
+          arr.push(p);
+          localStorage.setItem(key, JSON.stringify(arr));
+        });
+      } catch(e) {}
+    }
+
+    function setActive(id) {
+      activeProfileId = id;
+      try {
+        if (id) localStorage.setItem('mgh_active_id', id);
+        else localStorage.removeItem('mgh_active_id');
+      } catch(e) {}
+    }
+
+    // ── Chip renderer ────────────────────────────────────────────────────────
+    function renderChips() {
+      var profiles = getProfiles();
+      var grid = document.getElementById('chipGrid');
+      grid.innerHTML = '';
+
+      profiles.forEach(function(p) {
+        var isActive = p.id === activeProfileId;
+        var btn = document.createElement('button');
+        btn.className = 'chip' + (isActive ? ' active' : '');
+        btn.style.setProperty('--chip-color', p.color);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+
+        var av = document.createElement('span');
+        av.className = 'chip-avatar';
+        av.textContent = p.name[0].toUpperCase();
+        btn.appendChild(av);
+
+        var label = document.createElement('span');
+        label.textContent = p.name;
+        btn.appendChild(label);
+
+        btn.addEventListener('click', function() {
+          var newId = isActive ? null : p.id;
+          setActive(newId);
+          renderChips();
+        });
+
+        grid.appendChild(btn);
+      });
+
+      // Add chip
+      var addBtn = document.createElement('button');
+      addBtn.className = 'chip chip-add';
+      addBtn.textContent = '＋ Add name';
+      addBtn.addEventListener('click', showAddForm);
+      grid.appendChild(addBtn);
+    }
+
+    // ── Add form ─────────────────────────────────────────────────────────────
+    function showAddForm() {
+      document.getElementById('addForm').classList.add('visible');
+      document.getElementById('newName').focus();
+    }
+
+    function cancelAdd() {
+      document.getElementById('addForm').classList.remove('visible');
+      document.getElementById('newName').value = '';
+      selectedColor = PALETTE[2];
+      refreshSwatches();
+    }
+
+    function confirmAdd() {
+      var name = document.getElementById('newName').value.trim();
+      if (!name) { document.getElementById('newName').focus(); return; }
+      var p = { id: Date.now().toString(), name: name, color: selectedColor };
+      addProfileToStorage(p);
+      document.getElementById('newName').value = '';
+      document.getElementById('addForm').classList.remove('visible');
+      setActive(p.id);
+      selectedColor = PALETTE[2];
+      refreshSwatches();
+      renderChips();
+    }
+
+    // ── Color swatches ───────────────────────────────────────────────────────
+    function refreshSwatches() {
+      var container = document.getElementById('colorPicker');
+      container.innerHTML = '';
+      PALETTE.forEach(function(c) {
+        var sw = document.createElement('button');
+        sw.className = 'color-swatch' + (c === selectedColor ? ' selected' : '');
+        sw.style.background = c;
+        sw.setAttribute('aria-label', 'Pick colour ' + c);
+        sw.addEventListener('click', function() {
+          selectedColor = c;
+          refreshSwatches();
+        });
+        container.appendChild(sw);
+      });
+    }
+
+    // ── Keyboard: Enter to save in add form ──────────────────────────────────
+    document.getElementById('newName').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') confirmAdd();
+      if (e.key === 'Escape') cancelAdd();
+    });
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+    try { activeProfileId = localStorage.getItem('mgh_active_id') || null; } catch(e) {}
+    refreshSwatches();
+    renderChips();
+  </script>
+
+</body>
+</html>

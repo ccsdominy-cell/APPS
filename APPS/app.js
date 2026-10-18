@@ -5880,7 +5880,16 @@ renderProfiles();
 showScreen('profileScreen');
 document.getElementById('studyBack').style.display='none';
 SYNONYM_GROUPS = buildSynonymGroups();
-try{var _sl=localStorage.getItem('gcse_lang')||'fr';if(_sl==='es')switchLang('es');}catch(e){}
+// Language: URL param → localStorage → default fr
+try{var _sl=new URLSearchParams(location.search).get('lang')||localStorage.getItem('gcse_lang')||'fr';if(_sl==='es')switchLang('es');}catch(e){}
+// Auto-select profile if arriving from the hub
+try{
+  var _aid=localStorage.getItem('mgh_active_id');
+  if(_aid){
+    var _ai=profiles.findIndex(function(p){return p.id===_aid;});
+    if(_ai>=0){selectProfile(_ai);}
+  }
+}catch(e){}
 
 // Service Worker for offline PWA
 if('serviceWorker' in navigator){

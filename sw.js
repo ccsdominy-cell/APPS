@@ -1,4 +1,4 @@
-const CACHE = 'aceit-v41';
+const CACHE = 'aceit-v42';
 
 const FILES = [
   './',

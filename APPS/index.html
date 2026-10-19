@@ -27,7 +27,7 @@
   <a href="/" class="hub-back">← mygcsehub</a>
   <div class="logo" id="langLogo">
     <h1 id="logoH1">French <span>GCSE</span></h1>
-    <p id="logoSub">AQA 8652 · 2027 Exams</p>
+    <p id="logoSub"></p>
   </div>
   <div class="profiles-label">Who's studying?</div>
   <div class="profiles-grid" id="profilesGrid"></div>
@@ -73,7 +73,7 @@
       </div>
       <div class="daily-goal-info">
         <div class="daily-goal-title">
-          Today's Flashcards
+          Today's Vocab Flashcards
           <span class="streak-badge" id="streakBadge">🔥 0</span>
         </div>
         <div class="daily-goal-sub" id="goalSubtext">Tap to start — balanced across all themes</div>
@@ -104,11 +104,22 @@
 </div>
     
    <div id="studyModeSection">
-    <div class="section-label" style="text-align:center">Study Mode</div>
+    <div class="section-label" style="text-align:center">Exam Practice</div>
+    <!-- Speaking Papers — elevated to top -->
+    <div class="mode-card" id="modeSpeaking" style="background:linear-gradient(135deg,rgba(227,179,65,0.08),rgba(227,179,65,0.04));border:1.5px solid rgba(227,179,65,0.35)">
+      <div class="mode-icon" style="background:rgba(227,179,65,0.15);font-size:1.3rem">🎤</div>
+      <div class="mode-info">
+        <div class="mode-title" id="examPracticeTitle" style="color:var(--gold)">French GCSE – Speaking Papers</div>
+        <div class="mode-desc">Simulate the real AQA speaking exam — role plays, reading aloud and photo cards. Full candidate card format.</div>
+      </div>
+      <div style="font-size:0.6rem;color:var(--gold);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;flex-shrink:0">AQA<br>Paper 2</div>
+    </div>
+
+    <div class="section-label" style="text-align:center;margin-top:8px">Study Modes</div>
     <div class="mode-card" id="modeHard">
       <div class="mode-icon" style="background:rgba(248,81,73,0.12)">💪</div>
       <div class="mode-info">
-        <div class="mode-title">Hard Words</div>
+        <div class="mode-title">Your Hard Words</div>
         <div class="mode-desc">Only words you've struggled with. Master your weak spots.</div>
       </div>
       <div class="mode-count" id="hardCount" style="display:none">–</div>
@@ -133,7 +144,7 @@
     <div class="mode-card" id="modeTime">
       <div class="mode-icon" style="background:rgba(188,140,255,0.12)">⏱</div>
       <div class="mode-info">
-        <div class="mode-title">Time Expressions</div>
+        <div class="mode-title">Time Expressions &amp; Tenses</div>
         <div class="mode-desc">Recognise tense signals when reading. Recall them grouped by tense when writing.</div>
       </div>
       <div class="mode-count" id="timeCount" style="display:none">–</div>
@@ -141,7 +152,7 @@
     <div class="mode-card" id="modeSyn">
       <div class="mode-icon" style="background:rgba(188,140,255,0.12)">🔗</div>
       <div class="mode-info">
-        <div class="mode-title">Synonyms</div>
+        <div class="mode-title">Common Synonyms</div>
         <div class="mode-desc">Given an English meaning, recall all French synonyms in the group. Learn the nuances.</div>
       </div>
       <div class="mode-count" id="synCount" style="display:none">–</div>
@@ -155,16 +166,6 @@
       </div>
       <div class="mode-count" style="display:none">30</div>
     </div>
-
-    <!-- Exam Practice — distinct card, last in list -->
-    <div class="mode-card" id="modeSpeaking" style="background:linear-gradient(135deg,rgba(227,179,65,0.08),rgba(227,179,65,0.04));border:1.5px solid rgba(227,179,65,0.35);margin-top:4px">
-      <div class="mode-icon" style="background:rgba(227,179,65,0.15);font-size:1.3rem">🎤</div>
-      <div class="mode-info">
-        <div class="mode-title" id="examPracticeTitle" style="color:var(--gold)">French GCSE – Speaking</div>
-        <div class="mode-desc">Simulate the real AQA speaking exam — role plays, reading aloud and photo cards. Full candidate card format.</div>
-      </div>
-      <div style="font-size:0.6rem;color:var(--gold);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;flex-shrink:0">AQA<br>Paper 2</div>
-    </div>
   </div>
     
   </div>
@@ -175,7 +176,7 @@
   <div class="speak-screen" style="position:relative">
     <div class="top-bar" style="justify-content:flex-start;gap:10px;position:relative;z-index:10">
       <button class="back-btn" id="speakBack" style="font-size:1.3rem">←</button>
-      <span class="speak-top-title" id="speakScreenTitle" style="flex:1">🎤 French GCSE – Speaking</span>
+      <span class="speak-top-title" id="speakScreenTitle" style="flex:1">🎤 French GCSE – Speaking Papers</span>
       <button class="speak-tips-btn" id="speakTipsBtn" onclick="toggleSpeakTips()">💡 SPALMA / SORE</button>
     </div>
     <div class="speak-body" id="speakBody" tabindex="0"></div>
@@ -2100,9 +2101,9 @@ window.switchLang=function(lang){
   var ei=document.querySelector('#modeExpr .mode-icon');
   if(ei)ei.textContent=es?'🐂':'🐓';
   var ep=document.getElementById('examPracticeTitle');
-  if(ep)ep.textContent=(es?'Spanish':'French')+' GCSE – Speaking';
+  if(ep)ep.textContent=(es?'Spanish':'French')+' GCSE – Speaking Papers';
   var ss=document.getElementById('speakScreenTitle');
-  if(ss)ss.textContent='🎤 '+(es?'Spanish':'French')+' GCSE – Speaking';
+  if(ss)ss.textContent='🎤 '+(es?'Spanish':'French')+' GCSE – Speaking Papers';
   var fc=document.getElementById('modeFaux');
   if(fc)fc.style.display=es?'none':'';
   renderProfiles();

@@ -45,6 +45,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 #profileScreen{align-items:center;justify-content:flex-start;padding:40px 20px 32px;gap:0;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
 .logo{text-align:center;margin-bottom:36px;animation:fadeUp 0.5s ease both}
 .logo .flag{font-size:2.8rem;margin-bottom:10px;display:block}
+.hub-back{display:inline-block;font-size:0.78rem;font-weight:600;color:var(--text3);text-decoration:none;letter-spacing:0.04em;margin-bottom:20px;padding:6px 12px;border-radius:20px;border:1px solid var(--border);transition:all 0.15s;align-self:flex-start}
+.hub-back:hover{color:var(--green);border-color:var(--green)}
 .logo h1{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:var(--text);line-height:1;letter-spacing:-0.02em}
 .logo h1 span{color:var(--green)}
 .logo p{color:var(--text2);font-size:0.82rem;margin-top:6px;letter-spacing:0.12em;text-transform:uppercase}

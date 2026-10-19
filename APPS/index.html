@@ -24,6 +24,7 @@
 
 <!-- PROFILE SCREEN -->
 <div class="screen" id="profileScreen" tabindex="0">
+  <a href="/" class="hub-back">← mygcsehub</a>
   <div class="logo" id="langLogo">
     <h1 id="logoH1">French <span>GCSE</span></h1>
     <p id="logoSub">AQA 8652 · 2027 Exams</p>
@@ -159,7 +160,7 @@
     <div class="mode-card" id="modeSpeaking" style="background:linear-gradient(135deg,rgba(227,179,65,0.08),rgba(227,179,65,0.04));border:1.5px solid rgba(227,179,65,0.35);margin-top:4px">
       <div class="mode-icon" style="background:rgba(227,179,65,0.15);font-size:1.3rem">🎤</div>
       <div class="mode-info">
-        <div class="mode-title" style="color:var(--gold)">Exam Practice</div>
+        <div class="mode-title" id="examPracticeTitle" style="color:var(--gold)">French GCSE – Speaking</div>
         <div class="mode-desc">Simulate the real AQA speaking exam — role plays, reading aloud and photo cards. Full candidate card format.</div>
       </div>
       <div style="font-size:0.6rem;color:var(--gold);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;flex-shrink:0">AQA<br>Paper 2</div>
@@ -174,7 +175,7 @@
   <div class="speak-screen" style="position:relative">
     <div class="top-bar" style="justify-content:flex-start;gap:10px;position:relative;z-index:10">
       <button class="back-btn" id="speakBack" style="font-size:1.3rem">←</button>
-      <span class="speak-top-title" style="flex:1">🎤 Exam Practice</span>
+      <span class="speak-top-title" id="speakScreenTitle" style="flex:1">🎤 French GCSE – Speaking</span>
       <button class="speak-tips-btn" id="speakTipsBtn" onclick="toggleSpeakTips()">💡 SPALMA / SORE</button>
     </div>
     <div class="speak-body" id="speakBody" tabindex="0"></div>
@@ -2098,6 +2099,10 @@ window.switchLang=function(lang){
   if(ed)ed.textContent=es?'Hilarious Spanish phrases that make no sense word-for-word. Can you guess what they mean?':'Hilarious French phrases that make no sense word-for-word. Can you guess what they mean?';
   var ei=document.querySelector('#modeExpr .mode-icon');
   if(ei)ei.textContent=es?'🐂':'🐓';
+  var ep=document.getElementById('examPracticeTitle');
+  if(ep)ep.textContent=(es?'Spanish':'French')+' GCSE – Speaking';
+  var ss=document.getElementById('speakScreenTitle');
+  if(ss)ss.textContent='🎤 '+(es?'Spanish':'French')+' GCSE – Speaking';
   var fc=document.getElementById('modeFaux');
   if(fc)fc.style.display=es?'none':'';
   renderProfiles();

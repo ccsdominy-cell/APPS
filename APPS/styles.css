@@ -50,16 +50,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 .logo p{color:var(--text2);font-size:0.82rem;margin-top:6px;letter-spacing:0.12em;text-transform:uppercase}
 
 .profiles-label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:10px;width:100%;max-width:380px;text-align:center}
-.profiles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;max-width:380px;margin-bottom:12px}
-.profile-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:18px 14px;cursor:pointer;transition:all 0.18s;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;animation:fadeUp 0.5s ease both}
-.profile-btn:hover,.profile-btn:active{border-color:var(--accent);background:var(--surface2);transform:translateY(-2px)}
-.profile-btn .avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;flex-shrink:0}
-.profile-btn .pname{font-size:0.9rem;font-weight:600;color:var(--text)}
-.profile-btn .pstats{font-size:0.72rem;color:var(--text2);text-align:center;line-height:1.3}
-.profile-btn .pdel{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:0.9rem;padding:2px;line-height:1;opacity:0;transition:opacity 0.15s}
+.profiles-grid{display:flex;flex-wrap:wrap;gap:8px;width:100%;max-width:480px;margin-bottom:16px;justify-content:center}
+.profile-btn{background:var(--surface);border:2px solid var(--border);border-radius:40px;padding:9px 20px;cursor:pointer;transition:all 0.15s ease;display:inline-flex;align-items:center;gap:6px;animation:fadeUp 0.5s ease both;font-family:'Outfit',sans-serif}
+.profile-btn:hover,.profile-btn:active{border-color:var(--pcolor,var(--accent));transform:translateY(-1px)}
+.profile-btn .pname{font-size:0.9rem;font-weight:600;color:var(--text);transition:color 0.15s}
+.profile-btn:hover .pname,.profile-btn:active .pname{color:var(--pcolor,var(--accent))}
+.profile-btn .pdel{background:none;border:none;color:var(--text3);cursor:pointer;font-size:0.8rem;padding:0 0 0 6px;line-height:1;opacity:0;transition:opacity 0.15s;flex-shrink:0}
 .profile-btn:hover .pdel{opacity:1}
 
-.add-profile-btn{width:100%;max-width:380px;background:transparent;border:1.5px dashed var(--surface3);border-radius:var(--radius);padding:14px;color:var(--text2);font-family:'Outfit',sans-serif;font-size:0.88rem;cursor:pointer;transition:all 0.18s}
+.add-profile-btn{background:transparent;border:2px dashed var(--surface3);border-radius:40px;padding:9px 20px;color:var(--text2);font-family:'Outfit',sans-serif;font-size:0.88rem;cursor:pointer;transition:all 0.15s ease}
 .add-profile-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 .add-form{display:none;width:100%;max-width:380px;background:var(--surface);border-radius:var(--radius);padding:18px;margin-top:8px;border:1.5px solid var(--border)}

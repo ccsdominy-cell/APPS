@@ -1636,15 +1636,11 @@ function renderProfiles(){
   const grid = document.getElementById('profilesGrid');
   grid.innerHTML='';
   profiles.forEach((p,i)=>{
-    const prog = getProgress(p.id);
-    const seen = new Set();
-    const words = VOCAB.filter(v=>{ if(seen.has(v.f)) return false; seen.add(v.f); return true; });
     const div = document.createElement('div');
     div.className='profile-btn';
+    div.style.setProperty('--pcolor',p.color);
     div.style.animationDelay=i*0.05+'s';
-    div.innerHTML=`<div class="avatar" style="background:${p.color}22;color:${p.color}">${p.name[0].toUpperCase()}</div>
-      <div class="pname">${p.name}</div>
-      <button class="pdel" title="Delete" onclick="deleteProfile(event,${i})">✕</button>`;
+    div.innerHTML=`<span class="pname">${p.name}</span><button class="pdel" title="Delete" onclick="deleteProfile(event,${i})">✕</button>`;
     div.onclick=(e)=>{if(!e.target.classList.contains('pdel'))selectProfile(i);};
     grid.appendChild(div);
   });

@@ -430,6 +430,7 @@ mark{background:rgba(227,179,65,.25);color:var(--gold);border-radius:3px;padding
 
 <!-- PROFILE -->
 <div class="screen" id="profileScreen" tabindex="0">
+  <a href="/" style="display:inline-block;font-size:0.78rem;font-weight:600;color:var(--text3);text-decoration:none;letter-spacing:0.04em;margin-bottom:20px;padding:6px 12px;border-radius:20px;border:1px solid var(--border);transition:all 0.15s;align-self:flex-start">← mygcsehub</a>
   <div class="logo">
     <span class="icons">☪️ ✝️</span>
     <h1>RS <span>GCSE</span></h1>
@@ -452,7 +453,7 @@ mark{background:rgba(227,179,65,.25);color:var(--gold);border-radius:3px;padding
 <!-- MENU -->
 <div class="screen hidden" id="menuScreen">
   <div class="top-bar">
-    <button class="back-btn" id="menuBack">←</button>
+    <button class="back-btn" id="menuBack" style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;color:var(--text2);padding:10px 14px 10px 4px">PROFILES</button>
     <div style="display:flex;align-items:center;gap:8px">
       <div id="menuAvatar" class="p-avatar"></div>
       <span id="menuName" style="font-family:'Fraunces',serif;font-size:.95rem;font-weight:700"></span>
@@ -3839,6 +3840,14 @@ document.getElementById('feedbackSubmit').addEventListener('click', () => {
   const all = getFeedback();
   all.unshift(entry);
   saveFeedback(all);
+  // Also send to Google Sheet
+  try {
+    fetch('https://script.google.com/macros/s/AKfycbwsRTINXtoTTOML0flgXN9wBnFSuF_FIh8Kv3xzyW2v4jBAOs6guqzLLksBmsEldzdk/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ app: 'RS', tag: entry.tag, text: entry.text, screen: entry.screen, profile: entry.profile, date: entry.date })
+    }).catch(() => {});
+  } catch(e) {}
   document.getElementById('feedbackThanks').style.display = 'block';
   document.getElementById('feedbackSubmit').style.opacity = '0.4';
   setTimeout(() => {

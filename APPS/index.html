@@ -2108,6 +2108,22 @@ window.switchLang=function(lang){
   if(fc)fc.style.display=es?'none':'';
   renderProfiles();
 };
+// Language init — runs after switchLang is defined above.
+// app.js tries this too but switchLang isn't defined yet there, so it silently fails.
+// URL param (?lang=es) takes priority, then localStorage, then default French.
+(function(){
+  var p=new URLSearchParams(window.location.search).get('lang');
+  var saved;try{saved=localStorage.getItem('gcse_lang');}catch(e){}
+  var lang=p||saved||'fr';
+  if(lang==='es'){
+    switchLang('es');
+    // Re-run hub auto-select now that Spanish profiles are loaded
+    try{
+      var _aid=localStorage.getItem('mgh_active_id');
+      if(_aid){var _ai=profiles.findIndex(function(q){return q.id===_aid;});if(_ai>=0)selectProfile(_ai);}
+    }catch(e){}
+  }
+})();
 saveProfiles=function(){try{localStorage.setItem(currentLang+'_profiles',JSON.stringify(profiles));}catch(e){}};
 loadProfiles=function(){try{profiles=JSON.parse(localStorage.getItem(currentLang+'_profiles'))||[];}catch(e){profiles=[];}};
 getProgress=function(pid){try{return JSON.parse(localStorage.getItem(currentLang+'_progress_'+pid))||{};}catch(e){return {};}};

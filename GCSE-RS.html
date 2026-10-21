@@ -143,6 +143,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 .chip.on.u-c4{border-color:#378ADD;background:rgba(121,184,255,.22);color:#79b8ff}
 .filter-clear{font-size:.7rem;color:var(--text3);cursor:pointer;text-decoration:underline;margin-top:12px;display:inline-block;padding:4px 0;touch-action:manipulation}
 .filter-clear:hover{color:var(--text2)}
+#tutorMicBtn.mic-active{background:rgba(239,68,68,.15)!important;border-color:rgba(239,68,68,.7)!important;animation:mic-pulse 1s ease-in-out infinite}
+@keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0)}}
 
 /* FEEDBACK */
 .fb-tag{background:var(--surface2);border:1.5px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.75rem;color:var(--text2);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
@@ -582,6 +584,7 @@ mark{background:rgba(227,179,65,.25);color:var(--gold);border-radius:3px;padding
       <button id="tutorPhotoBtn" title="Photo your written answer" style="background:rgba(227,179,65,.12);border:1.5px solid rgba(227,179,65,.4);border-radius:50%;width:38px;height:38px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .15s;touch-action:manipulation">📷</button>
       <textarea id="tutorInput" placeholder="Ask anything about RS…" rows="1"
         style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:20px;padding:9px 15px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.88rem;resize:none;outline:none;max-height:120px;overflow-y:auto;line-height:1.4;transition:border-color .2s"></textarea>
+      <button id="tutorMicBtn" title="Speak your question" style="display:none;background:var(--surface2);border:1.5px solid var(--border);border-radius:50%;width:38px;height:38px;cursor:pointer;flex-shrink:0;align-items:center;justify-content:center;font-size:1rem;transition:all .2s;touch-action:manipulation">🎤</button>
       <button id="tutorSendBtn" style="background:var(--accent);border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:opacity .2s;touch-action:manipulation">➤</button>
     </div>
     <div id="tutorSuggestions" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
@@ -2491,7 +2494,7 @@ on('filterToggle', 'click', () => {
 });
 on('filterClear', 'click', () => {
   filterRels = new Set(['islam','christianity']);
-  filterSubs.clear(); filterUnits.clear();
+  filterSubs.clear(); filterUnits.clear(); filterConf.clear();
   buildFilterChips(); updateFilterBadge(); updateMenuCounts();
 });
 
@@ -3997,6 +4000,40 @@ document.addEventListener('click', e => {
     document.getElementById("pwax").onclick=function(){d.remove();localStorage.setItem("pwa_rs","1");};
   },2500);
 })();
+
+// ═══════════════════════════════════════════════════════
+//  MIC INPUT — Web Speech API for AI Tutor
+// ═══════════════════════════════════════════════════════
+(function(){
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var micBtn = document.getElementById('tutorMicBtn');
+  if (!SR || !micBtn) return;
+  micBtn.style.display = 'flex';
+  var recognition = new SR();
+  recognition.lang = 'en-GB';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  var listening = false;
+  recognition.onresult = function(e) {
+    var transcript = e.results[0][0].transcript;
+    var inp = document.getElementById('tutorInput');
+    if (inp) {
+      inp.value = (inp.value ? inp.value + ' ' : '') + transcript;
+      inp.dispatchEvent(new Event('input'));
+    }
+  };
+  recognition.onend = function() { listening = false; micBtn.classList.remove('mic-active'); };
+  recognition.onerror = function() { listening = false; micBtn.classList.remove('mic-active'); };
+  micBtn.addEventListener('click', function() {
+    if (listening) {
+      recognition.stop();
+    } else {
+      try { recognition.start(); listening = true; micBtn.classList.add('mic-active'); }
+      catch(err) {}
+    }
+  });
+})();
+
 </script>
 </body>
 </html>

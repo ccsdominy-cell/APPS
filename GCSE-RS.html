@@ -2621,10 +2621,14 @@ function updateFocusNudge(){
 }
 
 function updateStats(){
+  // Stats row was removed — elements no longer exist; guard to prevent TypeError.
+  const el=document.getElementById('sSeen');
+  if(!el||!currentProfile)return;
   const prog=getProg(currentProfile.id);
-  document.getElementById('sSeen').textContent=Object.keys(prog).length;
-  document.getElementById('sCorrect').textContent=Object.values(prog).filter(v=>v==='right').length;
-  document.getElementById('sHard').textContent=Object.values(prog).filter(v=>v==='wrong').length;
+  el.textContent=Object.keys(prog).length;
+  const sc=document.getElementById('sCorrect'),sh=document.getElementById('sHard');
+  if(sc)sc.textContent=Object.values(prog).filter(v=>v==='right').length;
+  if(sh)sh.textContent=Object.values(prog).filter(v=>v==='wrong').length;
 }
 function updateMenuCounts(){
   const cards=filteredCards();

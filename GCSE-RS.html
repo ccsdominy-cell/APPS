@@ -319,6 +319,13 @@ mark{background:rgba(227,179,65,.25);color:var(--gold);border-radius:3px;padding
 .c-quote{margin-top:11px;padding:9px 12px;background:rgba(227,179,65,.07);border-left:3px solid var(--gold);border-radius:0 7px 7px 0;flex-shrink:0;}
 .c-quote-t{font-size:.77rem;color:var(--gold);font-style:italic;line-height:1.5;}
 .c-quote-r{font-size:.63rem;color:var(--text3);margin-top:3px;}
+.sde-strip{display:flex;align-items:center;gap:5px;margin-bottom:8px;flex-wrap:wrap;}
+.sde-pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.06em;line-height:1.4;}
+.sde-pill.s{background:rgba(34,197,94,.13);color:#22c55e;border:1px solid rgba(34,197,94,.3);}
+.sde-pill.d{background:rgba(59,130,246,.13);color:#5b9cf6;border:1px solid rgba(59,130,246,.3);}
+.sde-pill.e{background:rgba(168,85,247,.13);color:#b47cf8;border:1px solid rgba(168,85,247,.3);}
+.sde-sep{font-size:.65rem;color:var(--text3);font-weight:700;}
+.sde-note{font-size:.62rem;color:var(--text3);margin-left:2px;}
 
 .ans-area{padding:12px 16px 24px;max-width:440px;width:100%;margin:0 auto;}
 .ans-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
@@ -2891,6 +2898,14 @@ function renderCard(card){
   const formattedAnswer = formatAnswer(card.a);
   document.getElementById('cBack').style.borderColor=col;
   document.getElementById('cBack').innerHTML=`
+    <div class="sde-strip">
+      <span class="sde-pill s">S</span>
+      <span class="sde-sep">+</span>
+      <span class="sde-pill d">D</span>
+      <span class="sde-sep">+</span>
+      <span class="sde-pill e">E</span>
+      <span class="sde-note">Part C answer — all 3 layers</span>
+    </div>
     <div class="c-ans-label">Answer</div>
     <div class="c-ans">${formattedAnswer}</div>
     ${card.quote?`<div class="c-quote"><div class="c-quote-t">"${card.quote}"</div><div class="c-quote-r">${card.quoteRef}</div></div>`:''}`;

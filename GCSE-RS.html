@@ -462,16 +462,7 @@ mark{background:rgba(227,179,65,.25);color:var(--gold);border-radius:3px;padding
   </div>
   <div class="p-label">Who's studying?</div>
   <div class="profiles-grid" id="profilesGrid"></div>
-  <button class="add-btn" id="addProfileBtn">+ Add profile</button>
-  <div class="add-form" id="addForm">
-    <input type="text" id="newName" placeholder="Your name" maxlength="20">
-    <span class="c-label">Pick a colour</span>
-    <div class="colors" id="colorPicker"></div>
-    <div class="fbtns">
-      <button class="btn btn-g" id="cancelAdd">Cancel</button>
-      <button class="btn btn-p" id="confirmAdd">Let's go →</button>
-    </div>
-  </div>
+  <a href="/" class="add-btn" style="text-decoration:none;text-align:center;display:block;max-width:380px">＋ Add name at mygcsehub</a>
 </div>
 
 <!-- MENU -->
@@ -2570,49 +2561,32 @@ on('filterClear', 'click', () => {
 // ═══════════════════════════════════════════════════════
 const COLORS=['#58a6ff','#3fb950','#f78166','#bc8cff','#e3b341','#f0883e','#79c0ff','#56d364'];
 let profiles=[],currentProfile=null,selectedColor=COLORS[0];
-function loadProfiles(){try{profiles=JSON.parse(localStorage.getItem('rs_profiles'))||[];}catch{profiles=[];}}
-function saveProfiles(){try{localStorage.setItem('rs_profiles',JSON.stringify(profiles));}catch(e){}}
+function loadProfiles(){
+  try{
+    var mgh=JSON.parse(localStorage.getItem('mgh_profiles')||'null');
+    profiles=mgh||(JSON.parse(localStorage.getItem('rs_profiles')||'[]'));
+  }catch{profiles=[];}
+}
+function saveProfiles(){/* Hub manages profiles — RS is read-only */}
 function getProg(pid){try{return JSON.parse(localStorage.getItem('rs_prog_'+pid))||{};}catch{return {};}}
 function saveProg(pid,d){try{localStorage.setItem('rs_prog_'+pid,JSON.stringify(d));}catch(e){}}
 
 function renderProfiles(){
   const g=document.getElementById('profilesGrid');g.innerHTML='';
+  if(!profiles.length){
+    g.innerHTML='<p style="color:var(--text2);font-size:0.85rem;text-align:center;padding:12px 0">No names yet — add one at <a href="/" style="color:var(--accent)">mygcsehub</a></p>';
+    return;
+  }
   profiles.forEach((p,i)=>{
-    const prog=getProg(p.id),seen=Object.keys(prog).length,
-      correct=Object.values(prog).filter(v=>v==='right').length,
-      hard=Object.values(prog).filter(v=>v==='wrong').length;
     const d=document.createElement('div');d.className='profile-btn';d.style.animationDelay=(i*.07)+'s';
-    d.innerHTML=`<button class="p-del">✕</button>
-      <div class="p-avatar" style="background:${p.color}20;color:${p.color}">${p.name[0].toUpperCase()}</div>
-      <div class="p-name">${p.name}</div>
-      <div class="p-stats">${seen} seen · ${correct}✓ · ${hard} hard</div>`;
-    d.addEventListener('click',e=>{if(e.target.classList.contains('p-del'))return;selectProfile(p);});
-    d.querySelector('.p-del').addEventListener('click',e=>{
-      e.stopPropagation();
-      if(confirm(`Delete ${p.name}'s profile?`)){profiles.splice(i,1);saveProfiles();try{localStorage.removeItem('rs_prog_'+p.id);}catch(e){}renderProfiles();}
-    });
+    d.innerHTML=`<div class="p-avatar" style="background:${p.color}20;color:${p.color}">${p.name[0].toUpperCase()}</div>
+      <div class="p-name">${p.name}</div>`;
+    d.addEventListener('click',()=>selectProfile(p));
     g.appendChild(d);
   });
 }
 
-function initColorPicker(){
-  const cp=document.getElementById('colorPicker');cp.innerHTML='';
-  COLORS.forEach(c=>{
-    const d=document.createElement('div');d.className='cdot'+(c===selectedColor?' sel':'');d.style.background=c;
-    d.addEventListener('click',()=>{selectedColor=c;cp.querySelectorAll('.cdot').forEach(x=>x.classList.remove('sel'));d.classList.add('sel');});
-    cp.appendChild(d);
-  });
-}
-on('addProfileBtn', 'click', ()=>{document.getElementById('addForm').classList.add('show');initColorPicker();document.getElementById('newName').focus();});
-on('cancelAdd', 'click', ()=>{document.getElementById('addForm').classList.remove('show');document.getElementById('newName').value='';});
-on('confirmAdd', 'click', ()=>{
-  const name=document.getElementById('newName').value.trim();if(!name)return;
-  const p={id:Date.now().toString(),name,color:selectedColor};
-  profiles.push(p);saveProfiles();renderProfiles();
-  document.getElementById('addForm').classList.remove('show');document.getElementById('newName').value='';
-  selectProfile(p);
-});
-on('newName', 'keydown', function(e){if(e.key==='Enter'){var c=document.getElementById('confirmAdd');if(c)c.click();}});
+// Profile management is handled by the hub (mygcsehub.co.uk). No add/delete here.
 
 function selectProfile(p){
   currentProfile=p;
@@ -4055,6 +4029,14 @@ document.querySelector('.logo').addEventListener('click', () => {
 //  INIT
 // ═══════════════════════════════════════════════════════
 loadProfiles();renderProfiles();showScreen('profileScreen');
+// Auto-select profile if arriving from hub
+try{
+  var _aid=localStorage.getItem('mgh_active_id');
+  if(_aid){
+    var _ap=profiles.find(function(p){return p.id===_aid;});
+    if(_ap)selectProfile(_ap);
+  }
+}catch(e){}
 initTutorAvatarBtn();
 initPartDFilters();
 

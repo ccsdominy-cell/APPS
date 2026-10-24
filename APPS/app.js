@@ -2026,6 +2026,8 @@ function showNextCard(){
     const isRev=fauxDirection==='rev';
     document.getElementById('frontTag').textContent=tag;
     document.getElementById('frontPos').textContent='';
+    window._frontSpeakLang=isRev?'en-GB':(window.currentLang==='es'?'es-ES':'fr-FR');
+    var _faEl=document.getElementById('frontArticle');if(_faEl)_faEl.textContent='';
     document.getElementById('hardDot').style.display=isHard?'block':'none';
     document.getElementById('frontWord').textContent=isRev?v.faux_ami_trap:v.f;
     document.getElementById('frontHint').textContent='';
@@ -2035,8 +2037,14 @@ function showNextCard(){
     buildMCQ(v,isRev);
   } else {
     const isFrEn=v.dir==='fr-en';
+    const _isEs=window.currentLang==='es';
     document.getElementById('frontTag').textContent=tag;
     document.getElementById('frontPos').textContent=v.pos;
+    // Article: show el/la before Spanish nouns when target language is on front
+    var _artEl=document.getElementById('frontArticle');
+    if(_artEl){_artEl.textContent=(_isEs&&v.pos==='n'&&v.g&&isFrEn)?(v.g==='m'?'el':'la'):'';}
+    // Track what language is on the front face for TTS
+    window._frontSpeakLang=isFrEn?(_isEs?'es-ES':'fr-FR'):'en-GB';
     document.getElementById('hardDot').style.display=isHard?'block':'none';
     if(isFrEn){
       document.getElementById('frontWord').textContent=v.f;
@@ -2050,7 +2058,7 @@ function showNextCard(){
       document.getElementById('backHint').textContent=v.pos+' · '+v.e;
     }
     document.getElementById('backTag').textContent=tag;
-    document.getElementById('studyDirBadge').textContent=isFrEn?'🇫🇷 French → 🇬🇧 English':'🇬🇧 English → 🇫🇷 French';
+    document.getElementById('studyDirBadge').textContent=isFrEn?(_isEs?'🇪🇸 Spanish → 🇬🇧 English':'🇫🇷 French → 🇬🇧 English'):(_isEs?'🇬🇧 English → 🇪🇸 Spanish':'🇬🇧 English → 🇫🇷 French');
     document.getElementById('studyDirBadge').style.display='';
     document.getElementById('cardInner').classList.remove('flipped');
     document.getElementById('answerArea').classList.add('hidden');
@@ -2076,12 +2084,13 @@ function showNextCard(){
 function speakFrench(){
   const word = document.getElementById('frontWord').textContent;
   if(!word) return;
-  // Only speak if showing French (fr-en direction or faux mode forward)
-  const isFrShowing = !document.getElementById('cardInner').classList.contains('flipped');
-  if(!isFrShowing) return;
+  // Only speak when the front face is visible (not flipped to back)
+  const isFlipped = document.getElementById('cardInner').classList.contains('flipped');
+  if(isFlipped) return;
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(word);
-  utterance.lang = 'fr-FR';
+  // Use the language tracked at card-render time: es-ES / fr-FR / en-GB
+  utterance.lang = window._frontSpeakLang || (window.currentLang==='es'?'es-ES':'fr-FR');
   utterance.rate = 0.9;
   window.speechSynthesis.speak(utterance);
 }

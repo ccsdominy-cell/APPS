@@ -1563,10 +1563,17 @@ function saveProfiles(){
 }
 function loadProfiles(){
   try{
-    // Read from canonical hub store first, fall back to lang-specific key
     var mgh=JSON.parse(localStorage.getItem('mgh_profiles')||'null');
-    profiles=mgh||(JSON.parse(localStorage.getItem('fr_profiles')||'[]'));
-  }catch{profiles=[];}
+    if(mgh&&mgh.length>0){profiles=mgh;return;}
+    // mgh_profiles not populated yet — merge from all subject stores (same migration as hub)
+    var fr=JSON.parse(localStorage.getItem('fr_profiles')||'[]');
+    var es=JSON.parse(localStorage.getItem('es_profiles')||'[]');
+    var rs=JSON.parse(localStorage.getItem('rs_profiles')||'[]');
+    var seen={},merged=[];
+    fr.concat(es).concat(rs).forEach(function(p){if(p&&p.id&&!seen[p.id]){seen[p.id]=true;merged.push(p);}});
+    profiles=merged;
+    if(merged.length)try{localStorage.setItem('mgh_profiles',JSON.stringify(merged));}catch(e){}
+  }catch(e){profiles=[];}
 }
 function getProgress(pid){
   try{return JSON.parse(localStorage.getItem('fr_progress_'+pid))||{};}catch{return {};}
@@ -1881,7 +1888,7 @@ function updateMenuStats(){
 document.getElementById('menuBack').onclick = () => {
   const studyActive = !document.getElementById('studyScreen')?.classList.contains('hidden');
   if(studyActive){ openMenu(); return; }
-  showScreen('profileScreen');
+  window.location.href = '/';
 };
 
 document.getElementById('modeHard').onclick=()=>{

@@ -2667,9 +2667,12 @@ function updateFocusNudge(){
 
 function updateStats(){
   const prog=getProg(currentProfile.id);
-  document.getElementById('sSeen').textContent=Object.keys(prog).length;
-  document.getElementById('sCorrect').textContent=Object.values(prog).filter(v=>v==='right').length;
-  document.getElementById('sHard').textContent=Object.values(prog).filter(v=>v==='wrong').length;
+  const elSeen=document.getElementById('sSeen');
+  const elCorr=document.getElementById('sCorrect');
+  const elHard=document.getElementById('sHard');
+  if(elSeen) elSeen.textContent=Object.keys(prog).length;
+  if(elCorr) elCorr.textContent=Object.values(prog).filter(v=>v==='right').length;
+  if(elHard) elHard.textContent=Object.values(prog).filter(v=>v==='wrong').length;
 }
 function updateMenuCounts(){
   const cards=filteredCards();

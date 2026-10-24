@@ -1558,9 +1558,15 @@ let isMCQMode = false;
 // ══════════════════════════════════════════════
 //  STORAGE
 // ══════════════════════════════════════════════
-function saveProfiles(){try{localStorage.setItem('fr_profiles',JSON.stringify(profiles));}catch(e){console.warn('Storage unavailable — profile not saved',e);}}
+function saveProfiles(){
+  // Subject apps don't add/delete profiles — hub manages that. No-op here.
+}
 function loadProfiles(){
-  try{profiles=JSON.parse(localStorage.getItem('fr_profiles'))||[];}catch{profiles=[];}
+  try{
+    // Read from canonical hub store first, fall back to lang-specific key
+    var mgh=JSON.parse(localStorage.getItem('mgh_profiles')||'null');
+    profiles=mgh||(JSON.parse(localStorage.getItem('fr_profiles')||'[]'));
+  }catch{profiles=[];}
 }
 function getProgress(pid){
   try{return JSON.parse(localStorage.getItem('fr_progress_'+pid))||{};}catch{return {};}
@@ -1631,63 +1637,27 @@ function showScreen(id){
 // ══════════════════════════════════════════════
 //  PROFILE SCREEN
 // ══════════════════════════════════════════════
-let selectedColor = COLORS[0];
 function renderProfiles(){
   const grid = document.getElementById('profilesGrid');
   grid.innerHTML='';
+  if(!profiles.length){
+    grid.innerHTML='<p style="color:var(--text2);font-size:0.85rem;text-align:center;padding:12px 0">No names yet — add one at <a href="/" style="color:var(--accent)">mygcsehub</a></p>';
+    return;
+  }
   profiles.forEach((p,i)=>{
     const div = document.createElement('div');
     div.className='profile-btn';
     div.style.setProperty('--pcolor',p.color);
     div.style.animationDelay=i*0.05+'s';
-    div.innerHTML=`<span class="pname">${p.name}</span><button class="pdel" title="Delete" onclick="deleteProfile(event,${i})">✕</button>`;
-    div.onclick=(e)=>{if(!e.target.classList.contains('pdel'))selectProfile(i);};
+    div.innerHTML=`<span class="pname">${p.name}</span>`;
+    div.onclick=()=>selectProfile(i);
     grid.appendChild(div);
   });
-}
-function deleteProfile(e,i){
-  e.stopPropagation();
-  if(confirm('Delete profile "'+profiles[i].name+'"?')){
-    try{localStorage.removeItem('fr_progress_'+profiles[i].id);}catch(err){console.warn('Storage unavailable',err);}
-    profiles.splice(i,1);
-    saveProfiles();
-    renderProfiles();
-  }
 }
 function selectProfile(i){
   currentProfile=profiles[i];
   openMenu();
 }
-
-// Add profile form
-document.getElementById('addProfileBtn').onclick=()=>{
-  document.getElementById('addForm').classList.toggle('visible');
-  document.getElementById('nameInput').focus();
-};
-document.getElementById('cancelAdd').onclick=()=>{
-  document.getElementById('addForm').classList.remove('visible');
-  document.getElementById('nameInput').value='';
-};
-document.getElementById('saveProfile').onclick=()=>{
-  const name=document.getElementById('nameInput').value.trim();
-  if(!name)return;
-  profiles.push({id:Date.now().toString(),name,color:selectedColor});
-  saveProfiles();
-  document.getElementById('nameInput').value='';
-  document.getElementById('addForm').classList.remove('visible');
-  renderProfiles();
-};
-document.getElementById('nameInput').onkeydown=e=>{if(e.key==='Enter')document.getElementById('saveProfile').click();};
-
-// Color picker
-const cp=document.getElementById('colorPicker');
-COLORS.forEach(c=>{
-  const d=document.createElement('div');
-  d.className='color-dot'+(c===selectedColor?' sel':'');
-  d.style.background=c;
-  d.onclick=()=>{selectedColor=c;cp.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('sel'));d.classList.add('sel');};
-  cp.appendChild(d);
-});
 
 // ══════════════════════════════════════════════
 //  MENU SCREEN

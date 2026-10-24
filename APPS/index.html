@@ -31,18 +31,7 @@
   </div>
   <div class="profiles-label">Who's studying?</div>
   <div class="profiles-grid" id="profilesGrid"></div>
-  <button class="add-profile-btn" id="addProfileBtn">＋ Add profile</button>
-  <div class="add-form" id="addForm">
-    <input type="text" id="nameInput" placeholder="Name" maxlength="16"
-      autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"
-      enterkeyhint="done" inputmode="text">
-    <span class="colors-label">Pick a colour</span>
-    <div class="colors" id="colorPicker"></div>
-    <div class="form-btns">
-      <button class="btn btn-ghost" id="cancelAdd">Cancel</button>
-      <button class="btn btn-primary" id="saveProfile">Save</button>
-    </div>
-  </div>
+  <a href="/" class="add-profile-btn" style="text-decoration:none;text-align:center">＋ Add name at mygcsehub</a>
 </div>
 
 <!-- MENU SCREEN -->
@@ -2154,8 +2143,13 @@ window.switchLang=function(lang){
     }catch(e){}
   }
 })();
-saveProfiles=function(){try{localStorage.setItem(currentLang+'_profiles',JSON.stringify(profiles));}catch(e){}};
-loadProfiles=function(){try{profiles=JSON.parse(localStorage.getItem(currentLang+'_profiles'))||[];}catch(e){profiles=[];}};
+saveProfiles=function(){/* Hub manages profiles — subject apps are read-only */};
+loadProfiles=function(){
+  try{
+    var mgh=JSON.parse(localStorage.getItem('mgh_profiles')||'null');
+    profiles=mgh||(JSON.parse(localStorage.getItem(currentLang+'_profiles')||'[]'));
+  }catch(e){profiles=[];}
+};
 getProgress=function(pid){try{return JSON.parse(localStorage.getItem(currentLang+'_progress_'+pid))||{};}catch(e){return {};}};
 saveProgress=function(pid,data){try{localStorage.setItem(currentLang+'_progress_'+pid,JSON.stringify(data));}catch(e){}};
 newDrillPrompt=function(){

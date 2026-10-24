@@ -2598,7 +2598,7 @@ function renderProfiles(){
 function selectProfile(p){
   currentProfile=p;
   const av=document.getElementById('menuAvatar');
-  av.style.background=p.color+'20';av.style.color=p.color;av.textContent=p.name[0].toUpperCase();
+  av.style.background=p.color+'20';av.style.color=p.color;av.textContent=p.name.slice(0,3).toUpperCase();
   document.getElementById('menuName').textContent=p.name;
   buildFilterChips(); updateFilterBadge();
   updateStats(); updateMenuCounts(); updateFocusNudge();
@@ -4035,15 +4035,13 @@ document.querySelector('.logo').addEventListener('click', () => {
 
 //  INIT
 // ═══════════════════════════════════════════════════════
-loadProfiles();renderProfiles();showScreen('profileScreen');
-// Auto-select profile if arriving from hub
+loadProfiles();renderProfiles();
+// Auto-select profile if arriving from hub — skip profile screen entirely if one is active
 try{
   var _aid=localStorage.getItem('mgh_active_id');
-  if(_aid){
-    var _ap=profiles.find(function(p){return p.id===_aid;});
-    if(_ap)selectProfile(_ap);
-  }
-}catch(e){}
+  var _ap=_aid?profiles.find(function(p){return p.id===_aid;}):null;
+  if(_ap){selectProfile(_ap);}else{showScreen('profileScreen');}
+}catch(e){showScreen('profileScreen');}
 initTutorAvatarBtn();
 initPartDFilters();
 

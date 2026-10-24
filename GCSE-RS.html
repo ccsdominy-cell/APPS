@@ -2564,8 +2564,15 @@ let profiles=[],currentProfile=null,selectedColor=COLORS[0];
 function loadProfiles(){
   try{
     var mgh=JSON.parse(localStorage.getItem('mgh_profiles')||'null');
-    profiles=mgh||(JSON.parse(localStorage.getItem('rs_profiles')||'[]'));
-  }catch{profiles=[];}
+    if(mgh&&mgh.length>0){profiles=mgh;return;}
+    var fr=JSON.parse(localStorage.getItem('fr_profiles')||'[]');
+    var es=JSON.parse(localStorage.getItem('es_profiles')||'[]');
+    var rs=JSON.parse(localStorage.getItem('rs_profiles')||'[]');
+    var seen={},merged=[];
+    fr.concat(es).concat(rs).forEach(function(p){if(p&&p.id&&!seen[p.id]){seen[p.id]=true;merged.push(p);}});
+    profiles=merged;
+    if(merged.length)try{localStorage.setItem('mgh_profiles',JSON.stringify(merged));}catch(e){}
+  }catch(e){profiles=[];}
 }
 function saveProfiles(){/* Hub manages profiles — RS is read-only */}
 function getProg(pid){try{return JSON.parse(localStorage.getItem('rs_prog_'+pid))||{};}catch{return {};}}
@@ -3888,7 +3895,7 @@ document.getElementById('customSowaAdd').addEventListener('click', () => {
 
 // Load custom cards on startup
 rebuildCustomCards();
-on('menuBack', 'click', ()=>showScreen('profileScreen'));
+on('menuBack', 'click', ()=>{ window.location.href='/'; });
 
 // ═══════════════════════════════════════════════════════
 //  TOAST

@@ -963,16 +963,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
   -webkit-overflow-scrolling: touch;
 }
 
-/* 8. Lang badge in top menu */
+/* 8. Lang label next to avatar in top menu */
 #menuLangFlag {
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.06em;
-  color: var(--accent);
-  padding: 2px 8px;
-  border: 1.5px solid var(--accent);
-  border-radius: 20px;
-  background: rgba(63,185,80,0.1);
+  color: var(--text2);
+  text-transform: uppercase;
+}
+
+/* 8b. Study mode section — space out cards */
+#studyModeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /* 9. Flashcard scroll fix:

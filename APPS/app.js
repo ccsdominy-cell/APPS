@@ -1696,7 +1696,7 @@ function openMenu(){
 };
   av.style.background=currentProfile.color+'22';
   av.style.color=currentProfile.color;
-  av.textContent=currentProfile.name[0].toUpperCase();
+  av.textContent=currentProfile.name.slice(0,3).toUpperCase();
   document.getElementById('menuName').textContent=currentProfile.name;
   // Show admin button only for CD Admin9
   var adminBtn = document.getElementById('menuAdminBtn');
@@ -5872,19 +5872,16 @@ function startTodaysGoal(){
 // ══════════════════════════════════════════════
 loadProfiles();
 renderProfiles();
-showScreen('profileScreen');
 document.getElementById('studyBack').style.display='none';
 SYNONYM_GROUPS = buildSynonymGroups();
 // Language: URL param → localStorage → default fr
 try{var _sl=new URLSearchParams(location.search).get('lang')||localStorage.getItem('gcse_lang')||'fr';if(_sl==='es')switchLang('es');}catch(e){}
-// Auto-select profile if arriving from the hub
+// Auto-select profile if arriving from the hub — skip profile screen entirely if one is active
 try{
   var _aid=localStorage.getItem('mgh_active_id');
-  if(_aid){
-    var _ai=profiles.findIndex(function(p){return p.id===_aid;});
-    if(_ai>=0){selectProfile(_ai);}
-  }
-}catch(e){}
+  var _ai=_aid?profiles.findIndex(function(p){return p.id===_aid;}):-1;
+  if(_ai>=0){selectProfile(_ai);}else{showScreen('profileScreen');}
+}catch(e){showScreen('profileScreen');}
 
 // Service Worker for offline PWA
 if('serviceWorker' in navigator){

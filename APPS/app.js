@@ -2028,6 +2028,8 @@ function showNextCard(){
     document.getElementById('frontPos').textContent='';
     window._frontSpeakLang=isRev?'en-GB':(window.currentLang==='es'?'es-ES':'fr-FR');
     var _faEl=document.getElementById('frontArticle');if(_faEl)_faEl.textContent='';
+    var _spkFaux=document.getElementById('speakBtn');
+    if(_spkFaux) _spkFaux.style.display=(window._frontSpeakLang==='en-GB')?'none':'';
     document.getElementById('hardDot').style.display=isHard?'block':'none';
     document.getElementById('frontWord').textContent=isRev?v.faux_ami_trap:v.f;
     document.getElementById('frontHint').textContent='';
@@ -2040,21 +2042,28 @@ function showNextCard(){
     const _isEs=window.currentLang==='es';
     document.getElementById('frontTag').textContent=tag;
     document.getElementById('frontPos').textContent=v.pos;
-    // Article: show el/la before Spanish nouns when target language is on front
+    // Article merged into word text — clear the separate article element
     var _artEl=document.getElementById('frontArticle');
-    if(_artEl){_artEl.textContent=(_isEs&&v.pos==='n'&&v.g&&isFrEn)?(v.g==='m'?'el':'la'):'';}
+    if(_artEl) _artEl.textContent='';
     // Track what language is on the front face for TTS
     window._frontSpeakLang=isFrEn?(_isEs?'es-ES':'fr-FR'):'en-GB';
+    // Hide speaker when English is on the front face
+    var _spk=document.getElementById('speakBtn');
+    if(_spk) _spk.style.display=(window._frontSpeakLang==='en-GB')?'none':'';
     document.getElementById('hardDot').style.display=isHard?'block':'none';
     if(isFrEn){
-      document.getElementById('frontWord').textContent=v.f;
+      // Spanish: prepend el/la to noun on front face; French: v.f already includes article
+      var _esArt=(_isEs&&v.pos==='n'&&v.g)?(v.g==='m'?'el ':'la '):'';
+      document.getElementById('frontWord').textContent=_esArt+v.f;
       document.getElementById('frontHint').textContent='';
       document.getElementById('backWord').textContent=v.e;
-      document.getElementById('backHint').textContent=v.pos+' · '+v.f;
+      document.getElementById('backHint').textContent=v.pos+' · '+v.e;
     } else {
       document.getElementById('frontWord').textContent=v.e;
       document.getElementById('frontHint').textContent='('+v.pos+')';
-      document.getElementById('backWord').textContent=v.f;
+      // Spanish: prepend el/la to noun on back face; French: v.f already includes article
+      var _esArtBack=(_isEs&&v.pos==='n'&&v.g)?(v.g==='m'?'el ':'la '):'';
+      document.getElementById('backWord').textContent=_esArtBack+v.f;
       document.getElementById('backHint').textContent=v.pos+' · '+v.e;
     }
     document.getElementById('backTag').textContent=tag;
@@ -2301,6 +2310,10 @@ document.getElementById('mcqNext').onclick = () => {
   showNextCard();
 };
 
+function esWithArticle(x){
+  return (window.currentLang==='es'&&x.pos==='n'&&x.g)?(x.g==='m'?'el ':'la ')+x.f:x.f;
+}
+
 function buildVocabMCQ(v, isFrEn){
   fauxAnswered = false;
   // Prefer distractors of the same part-of-speech; fall back to any filtered word
@@ -2308,9 +2321,9 @@ function buildVocabMCQ(v, isFrEn){
   const samePos  = filtered.filter(x => x.pos === v.pos);
   const pool     = samePos.length >= 3 ? samePos : filtered;
 
-  const correctAnswer = isFrEn ? v.e : v.f;
+  const correctAnswer = isFrEn ? v.e : esWithArticle(v);
   const distractors   = [...new Set(
-    shuffleArr(pool).map(x => isFrEn ? x.e : x.f).filter(t => t !== correctAnswer)
+    shuffleArr(pool).map(x => isFrEn ? x.e : esWithArticle(x)).filter(t => t !== correctAnswer)
   )].slice(0, 2);
 
   const options = shuffleArr([
@@ -2338,7 +2351,7 @@ function vocabRevealAnswer(chosen, v, isFrEn){
   fauxAnswered = true;
 
   const correct     = chosen && chosen.isCorrect;
-  const correctText = isFrEn ? v.e : v.f;
+  const correctText = isFrEn ? v.e : esWithArticle(v);
 
   // Flip the card to reveal the answer
   document.getElementById('cardInner').classList.add('flipped');

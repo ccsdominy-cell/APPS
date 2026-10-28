@@ -40,7 +40,7 @@
     <button class="back-btn" id="menuBack">PROFILES</button>
     <div class="user-info">
       <div class="user-avatar" id="menuAvatar"></div>
-      <span class="user-name" id="menuName" style="display:none"></span> <span id="menuLangFlag">French</span>
+      <span class="user-name" id="menuName"></span> <span id="menuLangFlag">French</span>
     </div>
     <button class="back-btn" id="menuSettingsBtn" title="Settings" style="font-size:1.1rem" onclick="toggleSettings()">⚙️</button>
     <button class="back-btn" id="menuProgressBtn" title="Progress" style="font-size:1.1rem" onclick="toggleProgress()">📊</button>
@@ -118,7 +118,7 @@
       <div class="mode-icon" style="background:rgba(63,185,80,0.12)">✍️</div>
       <div class="mode-info">
         <div class="mode-title">Adjective Drill</div>
-        <div class="mode-desc">Type the full French phrase with correct gender agreement.</div>
+        <div class="mode-desc">Type the full French phrase with correct gender agreement. Some phrases are created for grammar practice — focus on the agreement, not the meaning!</div>
       </div>
       <div class="mode-count" style="display:none">typed</div>
     </div>
@@ -2109,7 +2109,7 @@ window.switchLang=function(lang){
   // Clear any article shown when switching language
   var fa=document.getElementById('frontArticle');if(fa)fa.textContent='';
   var dd=document.querySelector('#modeDrill .mode-desc');
-  if(dd)dd.textContent='Type the full '+(es?'Spanish':'French')+' phrase with correct gender agreement.';
+  if(dd)dd.textContent='Type the full '+(es?'Spanish':'French')+' phrase with correct gender agreement. Some phrases are created for grammar practice — focus on the agreement, not the meaning!';
   var sd=document.querySelector('#modeSyn .mode-desc');
   if(sd)sd.textContent='Given an English meaning, recall all '+(es?'Spanish':'French')+' synonyms.';
   var ed=document.querySelector('#modeExpr .mode-desc');
@@ -2147,7 +2147,14 @@ saveProfiles=function(){/* Hub manages profiles — subject apps are read-only *
 loadProfiles=function(){
   try{
     var mgh=JSON.parse(localStorage.getItem('mgh_profiles')||'null');
-    profiles=mgh||(JSON.parse(localStorage.getItem(currentLang+'_profiles')||'[]'));
+    if(mgh&&mgh.length>0){profiles=mgh;return;}
+    var fr=JSON.parse(localStorage.getItem('fr_profiles')||'[]');
+    var es=JSON.parse(localStorage.getItem('es_profiles')||'[]');
+    var rs=JSON.parse(localStorage.getItem('rs_profiles')||'[]');
+    var seen={},merged=[];
+    fr.concat(es).concat(rs).forEach(function(p){if(p&&p.id&&!seen[p.id]){seen[p.id]=true;merged.push(p);}});
+    profiles=merged;
+    if(merged.length)try{localStorage.setItem('mgh_profiles',JSON.stringify(merged));}catch(e){}
   }catch(e){profiles=[];}
 };
 getProgress=function(pid){try{return JSON.parse(localStorage.getItem(currentLang+'_progress_'+pid))||{};}catch(e){return {};}};

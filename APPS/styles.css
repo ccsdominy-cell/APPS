@@ -94,12 +94,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit
 .weekly-cal{display:flex;gap:6px;width:100%;max-width:480px;margin:0 auto}
 .cal-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
 .cal-day-label{font-size:0.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em}
-.cal-day-dot{width:100%;aspect-ratio:1;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.75rem}
+.cal-day-dot{width:100%;aspect-ratio:1;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.75rem;transition:transform 0.15s}
 .cal-day-dot.done{background:rgba(63,185,80,0.25);border-color:var(--green)}
-.cal-day-dot.double{background:rgba(227,179,65,0.25);border-color:var(--gold)}
+.cal-day-dot.epic{background:rgba(249,115,22,0.25);border-color:#f97316}
+.cal-day-dot.legendary{background:rgba(168,85,247,0.25);border-color:#a855f7}
 .cal-day-dot.frozen{background:rgba(88,166,255,0.15);border-color:var(--accent)}
 .cal-day-dot.today{border-width:2px}
 .cal-day-dot.missed{background:rgba(248,81,73,0.1);border-color:rgba(248,81,73,0.2)}
+@keyframes tier-pop{0%{transform:scale(1)}35%{transform:scale(1.4)}65%{transform:scale(0.88)}100%{transform:scale(1)}}
+.cal-day-dot.tier-up{animation:tier-pop 0.55s cubic-bezier(.36,.07,.19,.97) both}
 .trophy-road{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 10px 12px}
 .trophy-road-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .trophy-road-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3)}

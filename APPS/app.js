@@ -1955,8 +1955,8 @@ function startStudy(mode){
   sessionCorrect=0;
   sessionWrong=0;
   deck=buildQueue(mode);
-  // Cap normal (Flashcard Challenge) to 20 cards to match daily goal
-  if(mode==='normal') deck=deck.slice(0,20);
+  // Cap normal (Flashcard Challenge) to 75 cards — enough to reach Legendary in one session
+  if(mode==='normal') deck=deck.slice(0,75);
   queue=[...deck];
   if(queue.length===0){showToast('No cards match your filters!');return;}
   showScreen('studyScreen');
@@ -5562,7 +5562,7 @@ function renderTipsOverlay(){
 // ══════════════════════════════════════════════
 //  DAILY GOAL SYSTEM
 // ══════════════════════════════════════════════
-const DAILY_GOAL = 20;
+const DAILY_GOAL = 30;
 
 function getDailyProgress(pid){
   const today = todayISO();
@@ -5592,12 +5592,19 @@ function recordDailyCorrect(pid){
   const prev = data.correct - 1;
   if(prev < DAILY_GOAL && data.correct >= DAILY_GOAL){
     data.streak = (data.streak||0) + 1;
-    setTimeout(()=>showToast('🔥 Daily goal hit! Streak: '+data.streak+' days!'), 400);
+    setTimeout(()=>showToast('✅ Daily goal hit! Streak: '+data.streak+' days!'), 400);
+    setTimeout(()=>triggerTierAnimation(), 600);
   }
-  // Double day reward
-  if(data.correct === DAILY_GOAL * 2){
-    setTimeout(()=>showToast('⚡ Double day! Freeze banked for this week!'), 400);
-    data.freeze = (data.freeze||0) + 1;
+  // Epic tier — 50+ cards
+  if(prev < 50 && data.correct >= 50){
+    setTimeout(()=>showToast('🔥 Epic day! Keep going for Legendary!'), 400);
+    setTimeout(()=>triggerTierAnimation(), 600);
+    data.freeze = (data.freeze||0) + 1; // Freeze banked at Epic
+  }
+  // Legendary tier — 75+ cards
+  if(prev < 75 && data.correct >= 75){
+    setTimeout(()=>showToast('🔥 Legendary day! Outstanding work!'), 400);
+    setTimeout(()=>triggerTierAnimation(), 600);
   }
   saveDailyProgress(pid, data);
   recordDailyHistory(pid, data.correct);
@@ -5629,12 +5636,25 @@ function updateDailyGoalUI(){
   if(sub){
     if(count === 0) sub.textContent = 'Tap to start your daily flashcards';
     else if(count < DAILY_GOAL) sub.textContent = (DAILY_GOAL - count) + ' words to go!';
-    else if(count < DAILY_GOAL * 2) sub.textContent = '✅ Goal done! Keep going for a double day ⚡';
-    else sub.textContent = '⚡ Double day achieved! Amazing work!';
+    else if(count < 50) sub.textContent = '✅ Goal done! Keep going for Epic 🔥';
+    else if(count < 75) sub.textContent = '🔥 Epic! Keep going for Legendary!';
+    else sub.textContent = '🔥 Legendary! Outstanding work!';
   }
 
-  // Change ring colour when done
-  if(fill) fill.style.stroke = count >= DAILY_GOAL ? 'var(--gold)' : 'var(--green)';
+  // Change ring colour by tier
+  if(fill){
+    if(count >= 75) fill.style.stroke = '#a855f7'; // Legendary — purple
+    else if(count >= 50) fill.style.stroke = '#f97316'; // Epic — orange
+    else if(count >= DAILY_GOAL) fill.style.stroke = 'var(--gold)';
+    else fill.style.stroke = 'var(--green)';
+  }
+}
+
+function triggerTierAnimation(){
+  document.querySelectorAll('.cal-day-dot.today').forEach(function(d){
+    d.classList.add('tier-up');
+    setTimeout(function(){ d.classList.remove('tier-up'); }, 700);
+  });
 }
 
 // ── TROPHY ROAD SYSTEM ──
@@ -5783,8 +5803,9 @@ function updateWeeklyCalendar(){
     let dotClass = 'cal-day-dot';
     let emoji = '';
     if(!isFuture){
-     if(entry.correct >= 40){ dotClass += ' double'; emoji = '⚡'; }
-      else if(entry.correct >= 20){ dotClass += ' done'; emoji = '✓'; }
+      if(entry.correct >= 75){ dotClass += ' legendary'; emoji = '🔥'; }
+      else if(entry.correct >= 50){ dotClass += ' epic'; emoji = '🔥'; }
+      else if(entry.correct >= 30){ dotClass += ' done'; emoji = '✓'; }
       else if(entry.frozen){ dotClass += ' frozen'; emoji = '❄️'; }
       else if(date < today){ dotClass += ' missed'; emoji = ''; }
     }
